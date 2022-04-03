@@ -3,12 +3,13 @@ import java.util.Random;
 
 public class Pokemon extends BasePokemon
 {
-    private String[][] natMatrix =
+    static final protected String[][] natMatrix =
         {{"Hardy", "Lonely", "Adamant", "Naughty", "Brave"},
         {"Bold", "Docile", "Impish", "Lax", "Relaxed"},
         {"Modest", "Mild", "Bashful", "Rash", "Quiet"},
         {"Calm", "Gentle", "Careful", "Quirky", "Sassy"},
         {"Timid", "Hasty", "Jolly", "Naive", "Serious"}};
+    static final protected Move moveNull = new Move(new Object[]{"NULL", 0, 0, 0, 0, 0});
 
     public String nickname = "";
     public int level, Exp, levelUpExp;
@@ -16,7 +17,8 @@ public class Pokemon extends BasePokemon
     public String nature;
     public float[] natMods = new float[]{1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     public int[] IVs = new int[6], EVs = new int[6];
-    public String[] moves = new String[4];
+
+    public Move[] moves = new Move[]{moveNull, moveNull, moveNull, moveNull};
 
     public Pokemon(int n)
     {
@@ -62,7 +64,7 @@ public class Pokemon extends BasePokemon
     {
         return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s",
             nickname, name, level,
-            primaryType, secondaryType.replace("NONE", ""),
+            types[primaryType], types[secondaryType].replace("NONE", ""),
             String.format("HP:    %3d",stats[0]), String.format("Spd:   %3d",stats[5]),
             String.format("Atk:   %3d",stats[1]), String.format("Def:   %3d",stats[2]),
             String.format("SpAtk: %3d",stats[3]), String.format("SpDef: %3d",stats[4]));
@@ -86,6 +88,20 @@ public class Pokemon extends BasePokemon
             EVs[i] = Math.max(256, EVs[i] + inputEVs[i]);
         }
         buildPokemon();
+    }
+
+    public void setMove(int i, Move m)
+    {
+        moves[i] = m;
+    }
+
+    public void printMoves()
+    {
+        System.out.println(String.format("%s (%s)", nickname, name) +
+            "\nMove 1:\n" + moves[0].name +
+            "\nMove 2:\n" + moves[1].name +
+            "\nMove 3:\n" + moves[2].name +
+            "\nMove 4:\n" + moves[3].name);
     }
 
     private void buildPokemon()
