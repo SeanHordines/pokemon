@@ -4,16 +4,16 @@ import java.util.Scanner;
 
 public class Move
 {
-    static final protected String[] types = new String[]{"NONE",
+    protected static final String[] types = new String[]{"NONE",
         "NORMAL", "FIGHTING", "FLYING", "POISON", "GROUND",
         "ROCK", "BUG", "GHOST", "STEEL", "FIRE",
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
         "DRAGON", "DARK", "FAIRY"};
-    static final protected String[] category = new String[]{"PHYSICAL", "SPECIAL", "STATUS"};
-    static final public Move moveNull = new Move("NULL", new int[]{0, 0, 0, 0, 0});
+    protected static final String[] category = new String[]{"PHYSICAL", "SPECIAL", "STATUS"};
+    public static final Move moveNull = new Move("NULL", new int[]{0, 0, 0, 0, 0, 0});
 
     public String name;
-    public int cat, type, power, acc, ppMax, ppCurr;
+    public int cat, type, power, acc, ppMax, ppCurr, priority;
 
     public Move(int n)
     {
@@ -33,7 +33,8 @@ public class Move
             type = Integer.parseInt(data[2]);
             power = Integer.parseInt(data[3]);
             acc = Integer.parseInt(data[4]);
-            ppMax = Integer.parseInt(data[5]);
+            priority = Integer.parseInt(data[5]);
+            ppMax = Integer.parseInt(data[6]);
             ppCurr = ppMax;
         }
         catch (FileNotFoundException ex)
@@ -49,7 +50,8 @@ public class Move
         type = data[1];
         power = data[2];
         acc = data[3];
-        ppMax = data[4];
+        priority = data[4];
+        ppMax = data[5];
         ppCurr = ppMax;
     }
 

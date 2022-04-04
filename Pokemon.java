@@ -3,13 +3,14 @@ import java.util.Random;
 
 public class Pokemon extends BasePokemon
 {
-    static final protected String[][] natMatrix =
+    protected static final String[][] natMatrix =
         {{"Hardy", "Lonely", "Adamant", "Naughty", "Brave"},
         {"Bold", "Docile", "Impish", "Lax", "Relaxed"},
         {"Modest", "Mild", "Bashful", "Rash", "Quiet"},
         {"Calm", "Gentle", "Careful", "Quirky", "Sassy"},
         {"Timid", "Hasty", "Jolly", "Naive", "Serious"}};
-    static final protected String[] statuses = {"NONE", "BURNED", "FROZEN", "PARALYZED", "POISONED", "ASLEEP"};
+    protected static final String[] statuses = {"NONE", "FAINTED", "BURNED", "FROZEN", "PARALYZED", "POISONED", "ASLEEP"};
+    public static final Pokemon pokeNull = new Pokemon(0);
 
     public String nickname = "";
     public int level, Exp, levelUpExp;

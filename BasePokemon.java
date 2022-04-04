@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class BasePokemon{
-    static final protected String[] types = new String[]{"NONE",
+    protected static final String[] types = new String[]{"NONE",
         "NORMAL", "FIGHTING", "FLYING", "POISON", "GROUND",
         "ROCK", "BUG", "GHOST", "STEEL", "FIRE",
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
@@ -27,7 +27,7 @@ public class BasePokemon{
         try
         {
             Scanner dexReader = new Scanner(statDex);
-            for(int i = 0; i < n; i++)
+            for(int i = 0; i < n+1; i++)
             {
                 data = dexReader.nextLine().split(" ");
             }

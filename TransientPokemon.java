@@ -3,10 +3,10 @@ import java.lang.Math;
 
 public class TransientPokemon
 {
-    static final protected float[] statChanges1 = {2f/8, 2f/7, 2f/6, 2f/5, 2f/4, 2f/3,
+    protected static final float[] statChanges1 = {2f/8, 2f/7, 2f/6, 2f/5, 2f/4, 2f/3,
                                                 2f/2,
                                                 3f/2, 4f/2, 5f/2, 6f/2, 7f/2, 8f/2};
-    static final protected float[] statChanges2 = {3f/9, 3f/8, 3f/7, 3f/6, 3f/5, 3f/4,
+    protected static final float[] statChanges2 = {3f/9, 3f/8, 3f/7, 3f/6, 3f/5, 3f/4,
                                                 3f/3,
                                                 4f/3, 5f/3, 6f/3, 7f/3, 8f/3, 9f/3};
 
@@ -47,6 +47,11 @@ public class TransientPokemon
             tempStats[0], tempStats[1],
             tempStats[2], tempStats[3],
             tempStats[4]);
+    }
+
+    public void damage(int dmg)
+    {
+        p.currHP -= dmg;
     }
 
     private void recalculate()
