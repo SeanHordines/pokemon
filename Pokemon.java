@@ -115,7 +115,7 @@ public class Pokemon extends BasePokemon
     private void buildPokemon()
     {
         stats[0] = (2 * baseStats[0]) + IVs[0] + (int) Math.floor(EVs[0]/4);
-        stats[0] = (int) Math.floor(stats[0] * level / 100);
+        stats[0] = (int) Math.floor((float) stats[0] * level / 100f);
         stats[0] = stats[0] + level + 10;
         currHP = stats[0];
 
@@ -140,8 +140,8 @@ public class Pokemon extends BasePokemon
     private int calcStat(int base, int IV, int EV, float mod)
     {
         int temp = (2 * base) + IV + (int) Math.floor(EV/4);
-        temp = (int) Math.floor(temp * level / 100);
-        temp = (int) Math.floor((temp + 5) * mod);
+        temp = (int) Math.floor((float) temp * level / 100f);
+        temp = (int) Math.floor((float) (temp + 5) * mod);
         return temp;
     }
 
