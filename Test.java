@@ -20,7 +20,11 @@ public class Test
         // System.out.println(test3);
 
         test1.setMove(0, new Move(1));
-        test2.setMove(0, new Move(2));
+        test2.setMove(0, new Move(1));
+        test3.setMove(0, new Move(1));
+        test1.setMove(1, new Move(2));
+        test2.setMove(1, new Move(3));
+        test3.setMove(1, new Move(4));
 
         Pokemon[] heroParty = new Pokemon[6];
         Arrays.fill(heroParty, new Pokemon(0));

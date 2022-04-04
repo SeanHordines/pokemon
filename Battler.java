@@ -97,7 +97,7 @@ public class Battler
 
     private int[] getVillainAction()
     {
-        return new int[]{0, 0};
+        return new int[]{0, 1};
     }
 
     private void execute(boolean b, int[] action)
@@ -129,7 +129,11 @@ public class Battler
         {
             //use item
         }
-        else if(action[0] == 3){ended = true;}
+        else if(action[0] == 3)
+        {
+            System.out.println("Ran away from the fight...");
+            ended = true;
+        }
     }
 
     private void useMove(boolean b, int moveIndex)
