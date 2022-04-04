@@ -10,7 +10,7 @@ public class Pokemon extends BasePokemon
         {"Calm", "Gentle", "Careful", "Quirky", "Sassy"},
         {"Timid", "Hasty", "Jolly", "Naive", "Serious"}};
     protected static final String[] statuses = {"NONE", "FAINTED", "BURNED", "FROZEN", "PARALYZED", "POISONED", "ASLEEP"};
-    public static final Pokemon pokeNull = new Pokemon(0);
+    public static final Pokemon pokeNull = new Pokemon(0, 0, "Hardy", new int[]{0, 0, 0, 0, 0, 0});
 
     public String nickname = "";
     public int level, Exp, levelUpExp;
@@ -66,11 +66,11 @@ public class Pokemon extends BasePokemon
     {
         return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n%s",
             nickname, name, level,
-            types[primaryType], types[secondaryType].replace("NONE", ""),
+            types[type1], types[type2].replace("NONE", ""),
             String.format("HP: %d/%d", currHP, stats[0]), statuses[status].replace("NONE", ""),
-            String.format("Atk:   %3d",stats[1]), String.format("Def:   %3d",stats[2]),
-            String.format("SpAtk: %3d",stats[3]), String.format("SpDef: %3d",stats[4]),
-            String.format("Spd:   %3d",stats[5]));
+            String.format("Atk:   %3d", stats[1]), String.format("Def:   %3d", stats[2]),
+            String.format("SpAtk: %3d", stats[3]), String.format("SpDef: %3d", stats[4]),
+            String.format("Spd:   %3d", stats[5]));
     }
 
     public void award(int nExp, int[] inputEVs)
@@ -88,7 +88,7 @@ public class Pokemon extends BasePokemon
     {
         for(int i = 0; i < 6; i++)
         {
-            EVs[i] = Math.max(256, EVs[i] + inputEVs[i]);
+            EVs[i] = Math.min(256, EVs[i] + inputEVs[i]);
         }
         buildPokemon();
     }
@@ -114,17 +114,16 @@ public class Pokemon extends BasePokemon
 
     private void buildPokemon()
     {
-        stats[0] = (2 * baseStats[0]) + IVs[0] + (int) Math.floor(EVs[0]/4);
-        stats[0] = (int) Math.floor((float) stats[0] * level / 100f);
-        stats[0] = stats[0] + level + 10;
-        currHP = stats[0];
-
+        float temp = (2f * baseStats[0]) + IVs[0] + (EVs[0]/4);
+        temp = 0.01f * level * temp;
+        temp = temp + 10f + level;
+        stats[0] = (int) temp;
         for(int i = 1; i < 6; i++)
         {
             stats[i] = calcStat(baseStats[i], IVs[i], EVs[i], natMods[i-1]);
         }
-
-        levelUpExp = (int) Math.floor(BST * Math.pow(level, 2) / 18);
+        levelUpExp = BST * level * level / 18;
+        currHP = stats[0];
     }
 
     private void levelUp()
@@ -139,10 +138,10 @@ public class Pokemon extends BasePokemon
 
     private int calcStat(int base, int IV, int EV, float mod)
     {
-        int temp = (2 * base) + IV + (int) Math.floor(EV/4);
-        temp = (int) Math.floor((float) temp * level / 100f);
-        temp = (int) Math.floor((float) (temp + 5) * mod);
-        return temp;
+        float temp = (2f * base) + IV + (EV/4);
+        temp = 0.01f * level * temp;
+        temp = (temp + 5f) * mod;
+        return (int) temp;
     }
 
     private void calcNat()

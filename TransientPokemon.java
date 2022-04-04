@@ -49,18 +49,30 @@ public class TransientPokemon
             tempStats[4]);
     }
 
+    public String toString()
+    {
+        return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n%s",
+            p.nickname, p.name, p.level,
+            p.types[p.type1], p.types[p.type2].replace("NONE", ""),
+            String.format("HP: %d/%d", p.currHP, p.stats[0]), p.statuses[p.status].replace("NONE", ""),
+            String.format("Atk:   %3d", tempStats[0]), String.format("Def:   %3d", tempStats[1]),
+            String.format("SpAtk: %3d", tempStats[2]), String.format("SpDef: %3d", tempStats[3]),
+            String.format("Spd:   %3d", tempStats[4]));
+    }
+
     public void damage(int dmg)
     {
         p.currHP -= dmg;
+        if(p.currHP < 0){p.currHP = 0;}
     }
 
     private void recalculate()
     {
         for(int i = 0; i < 5; i++)
         {
-            tempStats[i] = (int) Math.floor(p.stats[i+1] * statChanges1[statStages[i]]);
+            tempStats[i] = (int) (p.stats[i+1] * statChanges1[statStages[i]]);
         }
-        tempStats[5] = (int) Math.floor(100*statChanges2[statStages[5]]);
-        tempStats[6] = (int) Math.floor(100*statChanges2[statStages[6]]);
+        tempStats[5] = (int) (100f * statChanges2[statStages[5]]);
+        tempStats[6] = (int) (100f * statChanges2[statStages[6]]);
     }
 }

@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class Move
 {
-    protected static final String[] types = new String[]{"NONE",
+    protected static final String[] types = {"NONE",
         "NORMAL", "FIGHTING", "FLYING", "POISON", "GROUND",
         "ROCK", "BUG", "GHOST", "STEEL", "FIRE",
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
         "DRAGON", "DARK", "FAIRY"};
-    protected static final String[] category = new String[]{"PHYSICAL", "SPECIAL", "STATUS"};
-    public static final Move moveNull = new Move("NULL", new int[]{0, 0, 0, 0, 0, 0});
+    protected static final String[] category = {"PHYSICAL", "SPECIAL", "STATUS"};
+    public static final Move moveNull = new Move(0);
 
     public String name;
     public int cat, type, power, acc, ppMax, ppCurr, priority;
@@ -22,7 +22,7 @@ public class Move
         try
         {
             Scanner dexReader = new Scanner(moveDex);
-            for(int i = 0; i < n; i++)
+            for(int i = 0; i < n+1; i++)
             {
                 data = dexReader.nextLine().split(" ");
             }

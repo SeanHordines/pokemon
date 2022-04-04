@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class BasePokemon{
-    protected static final String[] types = new String[]{"NONE",
+    protected static final String[] types = {"NONE",
         "NORMAL", "FIGHTING", "FLYING", "POISON", "GROUND",
         "ROCK", "BUG", "GHOST", "STEEL", "FIRE",
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
@@ -11,7 +11,7 @@ public class BasePokemon{
 
     public int dexNum;
     public String name;
-    public int primaryType, secondaryType;
+    public int type1, type2;
     public int[] baseStats = new int[6];
     public int BST;
 
@@ -34,8 +34,8 @@ public class BasePokemon{
             dexReader.close();
 
             name = data[0];
-            primaryType = Integer.parseInt(data[1]);
-            secondaryType = Integer.parseInt(data[2]);
+            type1 = Integer.parseInt(data[1]);
+            type2 = Integer.parseInt(data[2]);
             BST = 0;
             for(int i = 0; i < 6; i++)
             {
@@ -53,7 +53,7 @@ public class BasePokemon{
     {
         return String.format("%s\nType(s): %s %s\n%s %s\n%s %s\n%s %s",
             name,
-            types[primaryType], types[secondaryType].replace("NONE", ""),
+            types[type1], types[type2].replace("NONE", ""),
             String.format("HP:    %3d",baseStats[0]), String.format("Spd:   %3d",baseStats[5]),
             String.format("Atk:   %3d",baseStats[1]), String.format("Def:   %3d",baseStats[2]),
             String.format("SpAtk: %3d",baseStats[3]), String.format("SpDef: %3d",baseStats[4]));
