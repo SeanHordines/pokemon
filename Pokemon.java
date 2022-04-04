@@ -9,16 +9,17 @@ public class Pokemon extends BasePokemon
         {"Modest", "Mild", "Bashful", "Rash", "Quiet"},
         {"Calm", "Gentle", "Careful", "Quirky", "Sassy"},
         {"Timid", "Hasty", "Jolly", "Naive", "Serious"}};
-    static final protected Move moveNull = new Move(new Object[]{"NULL", 0, 0, 0, 0, 0});
+    static final protected String[] statuses = {"NONE", "BURNED", "FROZEN", "PARALYZED", "POISONED", "ASLEEP"};
 
     public String nickname = "";
     public int level, Exp, levelUpExp;
     public int[] stats = new int[6];
+    public int currHP, status = 0;
     public String nature;
     public float[] natMods = new float[]{1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     public int[] IVs = new int[6], EVs = new int[6];
 
-    public Move[] moves = new Move[]{moveNull, moveNull, moveNull, moveNull};
+    public Move[] moves = new Move[]{Move.moveNull, Move.moveNull, Move.moveNull, Move.moveNull};
 
     public Pokemon(int n)
     {
@@ -62,12 +63,13 @@ public class Pokemon extends BasePokemon
 
     public String toString()
     {
-        return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s",
+        return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n%s",
             nickname, name, level,
             types[primaryType], types[secondaryType].replace("NONE", ""),
-            String.format("HP:    %3d",stats[0]), String.format("Spd:   %3d",stats[5]),
+            String.format("HP: %d/%d", currHP, stats[0]), statuses[status].replace("NONE", ""),
             String.format("Atk:   %3d",stats[1]), String.format("Def:   %3d",stats[2]),
-            String.format("SpAtk: %3d",stats[3]), String.format("SpDef: %3d",stats[4]));
+            String.format("SpAtk: %3d",stats[3]), String.format("SpDef: %3d",stats[4]),
+            String.format("Spd:   %3d",stats[5]));
     }
 
     public void award(int nExp, int[] inputEVs)
@@ -95,13 +97,18 @@ public class Pokemon extends BasePokemon
         moves[i] = m;
     }
 
-    public void printMoves()
+    public void setStatus(int s)
     {
-        System.out.println(String.format("%s (%s)", nickname, name) +
+        status = s;
+    }
+
+    public String listMoves()
+    {
+        return String.format("%s (%s)", nickname, name) +
             "\nMove 1:\n" + moves[0].name +
             "\nMove 2:\n" + moves[1].name +
             "\nMove 3:\n" + moves[2].name +
-            "\nMove 4:\n" + moves[3].name);
+            "\nMove 4:\n" + moves[3].name;
     }
 
     private void buildPokemon()
@@ -109,6 +116,7 @@ public class Pokemon extends BasePokemon
         stats[0] = (2 * baseStats[0]) + IVs[0] + (int) Math.floor(EVs[0]/4);
         stats[0] = (int) Math.floor(stats[0] * level / 100);
         stats[0] = stats[0] + level + 10;
+        currHP = stats[0];
 
         for(int i = 1; i < 6; i++)
         {

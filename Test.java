@@ -5,7 +5,7 @@ public class Test
         Pokemon test1 = new Pokemon(3, 50, "Sassy", new int[]{24, 8, 32, 8, 32, 8});
         test1.setNick("Bruteroot");
         test1.setEVs(new int[]{128, 64, 248, 64, 248, 64});
-        //System.out.println(test1);
+        System.out.println(test1);
 
         Pokemon test2 = new Pokemon(6, 50, "Rash", new int[]{8, 32, 8, 32, 8, 24});
         test2.setNick("Cinderbreath");
@@ -17,8 +17,11 @@ public class Test
         test3.setEVs(new int[]{64, 64, 248, 64, 248, 128});
         //System.out.println(test3);
 
-        Move first = new Move(1);
-        test1.setMove(0, first);
-        test1.printMoves();
+        test1.setMove(0, new Move(1));
+        TransientPokemon chosen = new TransientPokemon(test1);
+        chosen.changeStat(0, -3);
+        chosen.changeStat(3, +5);
+        System.out.println(chosen.listChanges());
+        System.out.println(chosen.listStats());
     }
 }

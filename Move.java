@@ -10,9 +10,10 @@ public class Move
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
         "DRAGON", "DARK", "FAIRY"};
     static final protected String[] category = new String[]{"PHYSICAL", "SPECIAL", "STATUS"};
+    static final public Move moveNull = new Move("NULL", new int[]{0, 0, 0, 0, 0});
 
     public String name;
-    public int cat, type, power, acc, pp;
+    public int cat, type, power, acc, ppMax, ppCurr;
 
     public Move(int n)
     {
@@ -32,7 +33,8 @@ public class Move
             type = Integer.parseInt(data[2]);
             power = Integer.parseInt(data[3]);
             acc = Integer.parseInt(data[4]);
-            pp = Integer.parseInt(data[5]);
+            ppMax = Integer.parseInt(data[5]);
+            ppCurr = ppMax;
         }
         catch (FileNotFoundException ex)
         {
@@ -40,21 +42,22 @@ public class Move
         }
     }
 
-    public Move(Object[] data)
+    public Move(String n, int[] data)
     {
-        name = (String) data[0];
-        cat = (int) data[1];
-        type = (int) data[2];
-        power = (int) data[3];
-        acc = (int) data[4];
-        pp = (int) data[5];
+        name = n;
+        cat = data[0];
+        type = data[1];
+        power = data[2];
+        acc = data[3];
+        ppMax = data[4];
+        ppCurr = ppMax;
     }
 
     public String toString()
     {
-        return String.format("%s\n%s %s\nPOW: %3d\nACC: %3d\nPP:  %3d",
+        return String.format("%s\n%s %s\nPOW:  %3d\nACC:  %3d\nPP: %d/%d",
             name,
             types[type], category[cat],
-            power, acc, pp);
+            power, acc, ppCurr, ppMax);
     }
 }
