@@ -10,13 +10,13 @@ public class Move
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
         "DRAGON", "DARK", "FAIRY"};
     protected static final String[] category = {"PHYSICAL", "SPECIAL", "STATUS"};
-    public static final Move moveNull = new Move(0);
 
     public String name;
-    public int cat, type, power, acc, ppMax, ppCurr, priority;
+    public int index, cat, type, power, acc, ppMax, ppCurr, priority;
 
     public Move(int n)
     {
+        index = n;
         File moveDex = new File("movedex.txt");
         String[] data = {};
         try
@@ -45,6 +45,7 @@ public class Move
 
     public Move(String n, int[] data)
     {
+        index = 0;
         name = n;
         cat = data[0];
         type = data[1];

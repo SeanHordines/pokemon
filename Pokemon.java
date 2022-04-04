@@ -10,7 +10,6 @@ public class Pokemon extends BasePokemon
         {"Calm", "Gentle", "Careful", "Quirky", "Sassy"},
         {"Timid", "Hasty", "Jolly", "Naive", "Serious"}};
     protected static final String[] statuses = {"NONE", "FAINTED", "BURNED", "FROZEN", "PARALYZED", "POISONED", "ASLEEP"};
-    public static final Pokemon pokeNull = new Pokemon(0, 0, "Hardy", new int[]{0, 0, 0, 0, 0, 0});
 
     public String nickname = "";
     public int level, Exp, levelUpExp;
@@ -20,7 +19,7 @@ public class Pokemon extends BasePokemon
     public float[] natMods = new float[]{1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     public int[] IVs = new int[6], EVs = new int[6];
 
-    public Move[] moves = new Move[]{Move.moveNull, Move.moveNull, Move.moveNull, Move.moveNull};
+    public Move[] moves = new Move[]{new Move(0), new Move(0), new Move(0), new Move(0)};
 
     public Pokemon(int n)
     {
@@ -105,11 +104,12 @@ public class Pokemon extends BasePokemon
 
     public String listMoves()
     {
-        return String.format("%s (%s)", nickname, name) +
-            "\nMove 1:\n" + moves[0].name +
-            "\nMove 2:\n" + moves[1].name +
-            "\nMove 3:\n" + moves[2].name +
-            "\nMove 4:\n" + moves[3].name;
+        String out = "";
+        for(int i = 0; i < 4; i++)
+        {
+            out += (moves[i].index != 0) ? String.format("%d. %s\n", i+1, moves[i].name) : String.format("%d. %s\n", i+1, "(Empty)");
+        }
+        return out.substring(0, out.length()-1);
     }
 
     private void buildPokemon()

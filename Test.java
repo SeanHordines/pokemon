@@ -23,10 +23,11 @@ public class Test
         test2.setMove(0, new Move(2));
 
         Pokemon[] heroParty = new Pokemon[6];
-        Arrays.fill(heroParty, Pokemon.pokeNull);
+        Arrays.fill(heroParty, new Pokemon(0));
         heroParty[0] = test1;
+        heroParty[1] = test3;
         Pokemon[] villainParty = new Pokemon[6];
-        Arrays.fill(villainParty, Pokemon.pokeNull);
+        Arrays.fill(villainParty, new Pokemon(0));
         villainParty[0] = test2;
 
         Battler b = new Battler(heroParty, villainParty);
