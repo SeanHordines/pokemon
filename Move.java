@@ -4,11 +4,6 @@ import java.util.Scanner;
 
 public class Move
 {
-    protected static final String[] types = {"NONE",
-        "NORMAL", "FIGHTING", "FLYING", "POISON", "GROUND",
-        "ROCK", "BUG", "GHOST", "STEEL", "FIRE",
-        "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
-        "DRAGON", "DARK", "FAIRY"};
     protected static final String[] category = {"PHYSICAL", "SPECIAL", "STATUS"};
 
     public String name;
@@ -60,7 +55,7 @@ public class Move
     {
         return String.format("%s\n%s %s\nPOW:  %3d\nACC:  %3d\nPP: %d/%d",
             name,
-            types[type], category[cat],
+            BasePokemon.types[type], category[cat],
             power, acc, ppCurr, ppMax);
     }
 }

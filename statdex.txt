@@ -4,7 +4,7 @@ Ivysaur 12 4 60 62 63 80 80 60
 Venusaur 12 4 80 82 83 100 100 80
 Charmander 10 0 39 52 43 60 50 65
 Charmeleon 10 0 58 64 58 80 65 80
-Charizard 10 16 78 84 78 109 85 100
+Charizard 10 3 78 84 78 109 85 100
 Squirtle 11 0 44 48 65 50 64 43
 Wartortle 11 0 59 63 80 65 80 58
 Blastoise 11 0 79 82 100 85 105 78

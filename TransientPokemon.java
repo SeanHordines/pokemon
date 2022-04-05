@@ -62,8 +62,9 @@ public class TransientPokemon
 
     public void damage(int dmg)
     {
-        p.currHP -= dmg;
-        if(p.currHP < 0){p.currHP = 0;}
+        p.currHP = Math.max(0, p.currHP - dmg);
+        System.out.println(p.name + " took " + dmg + " damage. (" + p.currHP + "/" + p.stats[0] + "HP)");
+        if(p.currHP == 0){System.out.println(p.name + " fainted!");}
     }
 
     private void recalculate()

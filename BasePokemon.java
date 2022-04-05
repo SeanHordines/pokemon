@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class BasePokemon{
-    protected static final String[] types = {"NONE",
+    public static final String[] types = {"NONE",
         "NORMAL", "FIGHTING", "FLYING", "POISON", "GROUND",
         "ROCK", "BUG", "GHOST", "STEEL", "FIRE",
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
