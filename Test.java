@@ -10,7 +10,7 @@ public class Test
         test1.setEVs(new int[]{64, 64, 64, 64, 64, 64});
         test1.setMove(0, new Move(2));
         test1.setMove(1, new Move(1));
-        System.out.println(test1);
+        // System.out.println(test1);
 
         //setup charizard
         Pokemon test2 = new Pokemon(6, 50, "Rash", new int[]{31, 31, 31, 31, 31, 31});
@@ -18,7 +18,7 @@ public class Test
         test2.setEVs(new int[]{64, 64, 64, 64, 64, 64});
         test2.setMove(0, new Move(3));
         test2.setMove(1, new Move(1));
-        System.out.println(test2);
+        // System.out.println(test2);
 
         //setup blastoise
         Pokemon test3 = new Pokemon(9, 50, "Impish", new int[]{31, 31, 31, 31, 31, 31});
@@ -27,21 +27,22 @@ public class Test
         test3.setMove(0, new Move(4));
         test3.setMove(1, new Move(1));
         test3.status = 5;
-        System.out.println(test3);
+        // System.out.println(test3);
 
         //create player party
-        Pokemon[] heroParty = new Pokemon[6];
-        Arrays.fill(heroParty, new Pokemon(0, 0));
-        heroParty[0] = test1;
-        heroParty[1] = test3;
-
-        //create opponent party
-        Pokemon[] villainParty = new Pokemon[6];
-        Arrays.fill(villainParty, new Pokemon(0, 0));
-        villainParty[0] = test2;
+        Player you = new Player("Your Name");
+        you.addPokemon(test1);
+        you.addPokemon(test3);
 
         //setup and start battle
-        Battler b = new Battler(heroParty, villainParty);
+        Battler b = new Battler(you, test2);
         b.start();
+        // System.out.println(test2);
+        // System.out.println(you.listTeam());
+
+        you.refreshAll();
+        test2.refresh();
+        // System.out.println(test2);
+        // System.out.println(you.listTeam());
     }
 }

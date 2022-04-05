@@ -5,15 +5,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.lang.Thread;
+import java.util.Arrays;
 
 //use to simulate battle between two teams
 public class Battler
 {
+    //run the battle sim with delays for easier reading
+    private boolean DELAY = true;
+
     //type effectiveness chart
     private float[][] effMatrix;
 
     private BattlePokemon[] hero = new BattlePokemon[6], villain = new BattlePokemon[6];
     private int currHero = 0, currVillain = 0;
+    private String heroName, villainName = "";
     private static boolean ended = false;
 
     //construct battle between two teams
@@ -23,16 +28,48 @@ public class Battler
         {
             hero[i] = new BattlePokemon(a[i]);
             villain[i] = new BattlePokemon(b[i]);
+            heroName = "You";
         }
+    }
+
+    //construct battle between two Actors
+    public Battler(Actor a, Actor b)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            hero[i] = new BattlePokemon(a.team[i]);
+            villain[i] = new BattlePokemon(b.team[i]);
+        }
+        heroName = a.name;
+        villainName = b.name;
+    }
+
+    //construct battle between Actor and single pokemon
+    public Battler(Actor a, Pokemon b)
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            hero[i] = new BattlePokemon(a.team[i]);
+        }
+        heroName = a.name;
+
+        Arrays.fill(villain, new BattlePokemon(Pokemon.nullPokemon));
+        villain[0] = new BattlePokemon(b);
     }
 
     //run the battle simulation
     public void start()
     {
-        System.out.println("Begin battle:");
-
-        //list active pokemon
-        System.out.println(String.format("%s lv.%d VS %s lv.%d", hero[currHero].p.name, hero[currHero].p.level, villain[currVillain].p.name, villain[currVillain].p.level));
+        if(villainName == "")
+        {
+            System.out.println(String.format("A wild %s appeared!", villain[currVillain].p.name));
+        }
+        else
+        {
+            System.out.println(String.format("% wants to Battle!", villainName));
+            System.out.println(String.format("%s sent out %s", villainName, villain[currVillain].p.nickname));
+        }
+        System.out.println(String.format("Go %s!", hero[currHero].p.nickname));
 
         //loop until one side wins
         do
@@ -40,18 +77,19 @@ public class Battler
             //check if active pokemon are fainted
             if(hero[currHero].p.status == 1)
             {
-                currHero = promptSwitch();
+                execute(true, new int[]{1, promptSwitch()});
             }
             if(villain[currVillain].p.status == 1)
             {
-                System.out.println(String.format("%s switched out for %s.", villain[currVillain].p.name, villain[currVillain+1].p.name));
-                currVillain += 1;
+                execute(false, new int[]{1, currVillain+1});
             }
 
             //get the actions of hero and villain
             System.out.println();
             int[] heroAction = promptHeroAction();
             int[] villainAction = promptVillainAction();
+
+            if(ended){break;}
 
             if(heroAction[0] > 0) //not using a move
             {
@@ -93,7 +131,7 @@ public class Battler
             }
 
             //check if one side has won
-            ended = checkEnded();
+            ended = ended || checkEnded();
         }
         while(!ended);
     }
@@ -109,8 +147,14 @@ public class Battler
             if(villain[i].p.dexNum != 0 && villain[i].p.status != 1){checkVillain = false;}
         }
 
-        if(checkHero){System.out.println("\nYou lost the battle!");}
-        if(checkVillain){System.out.println("\nYou won the battle!");}
+        if(checkVillain)
+        {
+            System.out.println(String.format("\n%s won the battle!", heroName));
+        }
+        else if(checkHero)
+        {
+            System.out.println(String.format("\n%s lost the battle!", heroName));
+        }
 
         return (checkHero || checkVillain);
     }
@@ -134,9 +178,21 @@ public class Battler
         }
         else if(choices[0] == 2) //use an item
         {
-            choices[1] = 0;
+            System.out.println("THIS IS NOT READY YET");
+            return promptHeroAction();
         }
-        else if(choices[0] == 3){choices[1] = 0;} //flee
+        else if(choices[0] == 3)
+        {
+            if(villainName != "")
+            {
+                System.out.println("Cannot flee from trainer battle...");
+                return promptHeroAction();
+            }
+            else
+            {
+                choices[1] = 0;
+            }
+        } //flee
 
         //check if input is valid
         if(choices[0] >= 4 || choices[0] < 0)
@@ -144,6 +200,9 @@ public class Battler
             System.out.println("Invalid Selection...");
             return promptHeroAction();
         }
+
+        //check if back was selected
+        if(choices[1] == -1){return promptHeroAction();}
 
         return choices;
     }
@@ -159,9 +218,12 @@ public class Battler
     private int promptMove()
     {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Choose move:");
+        System.out.println("Choose move: 0. Go back");
         System.out.println(hero[currHero].p.listMoves());
         int choice = sc.nextInt() - 1;
+
+        //check if go back is selected
+        if(choice == -1){return choice;}
 
         //check if input is valid
         if(hero[currHero].p.moves[choice].index == 0 || choice >= 4 || choice < 0)
@@ -176,18 +238,22 @@ public class Battler
     private int promptSwitch()
     {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Choose who to switch:");
+        System.out.println("Choose who to switch: 0. Go back");
         for(int i = 0; i < 6; i++)
         {
             if(currHero != i)
             {
-                System.out.println((hero[i].p.dexNum != 0) ? String.format("%d. %s lv.%d (%d/%d) %s",
-                i+1, hero[i].p.name, hero[i].p.level, hero[i].p.currHP, hero[i].p.stats[0], hero[i].p.statuses[hero[i].p.status].replace("NONE", "")) :
+                System.out.println((hero[i].p.dexNum != 0) ? String.format("%d. %s (%s) lv.%d (%d/%d) %s",
+                    i+1, hero[i].p.nickname, hero[i].p.name, hero[i].p.level,
+                    hero[i].p.currHP, hero[i].p.stats[0], hero[i].p.statuses[hero[i].p.status].replace("NONE", "")) :
                 String.format("%d. %s", i+1, "(empty)"));
             }
         }
 
         int choice = sc.nextInt() - 1;
+
+        //check if go back is selected
+        if(choice == -1){return choice;}
 
         //check if input is valid
         if(currHero == choice || choice >= 6 || choice < 0)
@@ -202,7 +268,7 @@ public class Battler
         }
 
         System.out.println();
-        System.out.println(String.format("%s retreated. Go %s!", hero[currHero].p.name,  hero[choice].p.name));
+        System.out.println(String.format("%s retreated. Go %s!", hero[currHero].p.nickname,  hero[choice].p.nickname));
         return choice;
     }
 
@@ -221,20 +287,21 @@ public class Battler
         }
         else if(action[0] == 1) //switch pokemon
         {
-            System.out.println();
             if(b)
             {
                 currHero = action[1];
             }
             else
             {
-                System.out.println(String.format("%s switched out for %s.", villain[currVillain].p.name, villain[action[1]].p.name));
+                System.out.println(String.format("%s (%s) switched out for %s (%s).",
+                    villain[currVillain].p.nickname, villain[currVillain].p.name,
+                    villain[action[1]].p.nickname, villain[action[1]].p.name));
                 currVillain = action[1];
             }
         }
         else if(action[0] == 2) //use item
         {
-            System.out.println("THIS IS NOT READY YET");
+
         }
         else if(action[0] == 3) //flee
         {
@@ -243,7 +310,7 @@ public class Battler
             ended = true;
         }
 
-        try{Thread.sleep(1500);}catch(Exception e){}
+        try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
     }
 
     //execute the use of a move
@@ -264,10 +331,10 @@ public class Battler
         //setup random
         Random rand = new Random();
 
-        System.out.println(attacker.p.name + " attacked " +
-            defender.p.name + " with " +
+        System.out.println(attacker.p.nickname + " attacked " +
+            defender.p.nickname + " with " +
             m.name);
-        try{Thread.sleep(750);}catch(Exception e){}
+        try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
 
         if(rand.nextFloat() < chance) //check if hits
         {
@@ -302,17 +369,17 @@ public class Battler
         if(mod >= 2.0)
         {
             System.out.println("It's super effective!");
-            try{Thread.sleep(750);}catch(Exception e){}
+            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
         }
         if(mod <= 0.5)
         {
             System.out.println("It's not very effective...");
-            try{Thread.sleep(750);}catch(Exception e){}
+            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
         }
         if(mod == 0.0)
         {
             System.out.println("It's had no effect!");
-            try{Thread.sleep(750);}catch(Exception e){}
+            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
         }
 
         //check if type of move matches type of attacker (STAB)
@@ -321,7 +388,7 @@ public class Battler
         //check for critical hit
         if(crit)
         {
-            try{Thread.sleep(750);}catch(Exception e){}
+            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
             System.out.println("Critical hit!");
             mod *= 2f;
         }

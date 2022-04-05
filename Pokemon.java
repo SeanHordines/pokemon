@@ -12,6 +12,7 @@ public class Pokemon extends BasePokemon
         {"Calm", "Gentle", "Careful", "Quirky", "Sassy"},
         {"Timid", "Hasty", "Jolly", "Naive", "Serious"}};
     protected static final String[] statuses = {"NONE", "FAINTED", "BURNED", "FROZEN", "PARALYZED", "POISONED", "ASLEEP"};
+    public static final Pokemon nullPokemon = new Pokemon(0, 0);
 
     //basic stats of any specific pokemon
     public String nickname = "";
@@ -124,6 +125,13 @@ public class Pokemon extends BasePokemon
             out += (moves[i].index != 0) ? String.format("%d. %s\n", i+1, moves[i].name) : String.format("%d. %s\n", i+1, "(Empty)");
         }
         return out.substring(0, out.length()-1);
+    }
+
+    //fully reset health and status
+    public void refresh()
+    {
+        currHP = stats[0];
+        status = 0;
     }
 
     //build pokemon stats and health given inputs
