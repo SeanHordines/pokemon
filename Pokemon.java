@@ -63,7 +63,7 @@ public class Pokemon extends BasePokemon
 
     public String toString()
     {
-        return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n%s",
+        return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n%s\n",
             nickname, name, level,
             types[type1], types[type2].replace("NONE", ""),
             String.format("HP: %d/%d", currHP, stats[0]), statuses[status].replace("NONE", ""),

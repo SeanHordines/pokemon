@@ -51,7 +51,7 @@ public class TransientPokemon
 
     public String toString()
     {
-        return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n%s",
+        return String.format("%s (%s) lv. %d\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n%s\n",
             p.nickname, p.name, p.level,
             p.types[p.type1], p.types[p.type2].replace("NONE", ""),
             String.format("HP: %d/%d", p.currHP, p.stats[0]), p.statuses[p.status].replace("NONE", ""),
@@ -64,7 +64,11 @@ public class TransientPokemon
     {
         p.currHP = Math.max(0, p.currHP - dmg);
         System.out.println(p.name + " took " + dmg + " damage. (" + p.currHP + "/" + p.stats[0] + "HP)");
-        if(p.currHP == 0){System.out.println(p.name + " fainted!");}
+        if(p.currHP == 0)
+        {
+            p.status = 1;
+            System.out.println(p.name + " fainted!");
+        }
     }
 
     private void recalculate()

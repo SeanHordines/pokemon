@@ -51,7 +51,7 @@ public class BasePokemon{
 
     public String toString()
     {
-        return String.format("%s\nType(s): %s %s\n%s %s\n%s %s\n%s %s",
+        return String.format("%s\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n",
             name,
             types[type1], types[type2].replace("NONE", ""),
             String.format("HP:    %3d",baseStats[0]), String.format("Spd:   %3d",baseStats[5]),
