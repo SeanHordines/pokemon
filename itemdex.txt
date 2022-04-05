@@ -1,0 +1,7 @@
+NULL 0 no effect
+Potion 1 Heals pokemon by 20 HP
+Antidote 1 Cures poisoning
+Pokeball 3 Used for catching pokemon
+RareCandy 0 Increases level by one
+Bicycle 4 Used to ride around
+X-Attack 2 increases atk by one stage

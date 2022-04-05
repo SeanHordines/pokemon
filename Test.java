@@ -36,7 +36,7 @@ public class Test
 
         //setup and start battle
         Battler b = new Battler(you, test2);
-        b.start();
+        // b.start();
         // System.out.println(test2);
         // System.out.println(you.listTeam());
 
@@ -44,5 +44,22 @@ public class Test
         test2.refresh();
         // System.out.println(test2);
         // System.out.println(you.listTeam());
+
+        you.awardBadge(3);
+        System.out.println(you.listBadges());
+
+        Item[] testItems = {new Item(1), new Item(2), new Item(3), new Item(4), new Item(5)};
+        you.addItem(testItems[0]);
+        you.addItem(testItems[1], 5);
+        you.addItem(testItems[2], 20);
+        you.addItem(testItems[3], 99);
+        you.removeItem(testItems[1]);
+        you.removeItem(testItems[2], 5);
+        you.removeAllItem(testItems[3]);
+        System.out.println(you.listBag());
+
+        System.out.println(new Item(0));
+        System.out.println(testItems[4]);
+
     }
 }
