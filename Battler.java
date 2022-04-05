@@ -240,7 +240,10 @@ public class Battler
                 ((float) attacker.tempStats[0]) / ((float) defender.tempStats[1]) :
                 ((float) attacker.tempStats[2]) / ((float) defender.tempStats[3]);
 
-            float adv = calcMod(attacker, defender, m, false);
+            chance = (float) attacker.tempStats[7] / 10000f;
+            System.out.println(chance);
+            boolean crit = (rand.nextFloat() < chance);
+            float adv = calcMod(attacker, defender, m, crit);
             float dmg = (2f * attacker.p.level / 5);
             dmg = ((dmg + 2) * m.power * ratio) / 50 + 2;
             dmg *= adv * (rand.nextFloat(0.15f) + 0.85f);
@@ -259,7 +262,12 @@ public class Battler
         if(mod <= 0.5){System.out.println("It's not very effective...");}
         if(mod == 0.0){System.out.println("It's had no effect!");}
         if(m.type == attacker.p.type1 || m.type == attacker.p.type2){mod *= 1.5f;}
-        if(crit){mod *= 2f;}
+        if(crit)
+        {
+            try{Thread.sleep(750);}catch(Exception e){}
+            System.out.println("Critical hit!");
+            mod *= 2f;
+        }
         return mod;
     }
 
