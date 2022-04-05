@@ -29,37 +29,44 @@ public class Test
         test3.status = 5;
         // System.out.println(test3);
 
+        //create a test player
+        Player.p = new Player("Your Name");
+
+        //test some items
+        Player.p.awardBadge(3);
+        // System.out.println(you.listBadges());
+        Item[] testItems = {new Item(1), new Item(2), new Item(3), new Item(4), new Item(5)};
+        Player.p.addItem(testItems[0]);
+        Player.p.addItem(testItems[1], 5);
+        Player.p.addItem(testItems[2], 20);
+        Player.p.addItem(testItems[3], 99);
+        Player.p.removeItem(testItems[1]);
+        Player.p.removeItem(testItems[2], 5);
+        Player.p.removeAllItem(testItems[3]);
+        // System.out.println(you.listBag());
+
+        // System.out.println(new Item(0));
+        // System.out.println(testItems[4]);
+
         //create player party
-        Player you = new Player("Your Name");
-        you.addPokemon(test1);
-        you.addPokemon(test3);
+        Player.p.addPokemon(test1);
+        Player.p.addPokemon(test3);
 
         //setup and start battle
-        Battler b = new Battler(you, test2);
-        // b.start();
+        Battler b = new Battler(Player.p, test2);
+        b.start();
         // System.out.println(test2);
         // System.out.println(you.listTeam());
 
-        you.refreshAll();
+        Player.p.refreshAll();
         test2.refresh();
         // System.out.println(test2);
         // System.out.println(you.listTeam());
 
-        you.awardBadge(3);
-        System.out.println(you.listBadges());
+        Actor other = new Actor("The other guy");
+        other.addPokemon(test2);
 
-        Item[] testItems = {new Item(1), new Item(2), new Item(3), new Item(4), new Item(5)};
-        you.addItem(testItems[0]);
-        you.addItem(testItems[1], 5);
-        you.addItem(testItems[2], 20);
-        you.addItem(testItems[3], 99);
-        you.removeItem(testItems[1]);
-        you.removeItem(testItems[2], 5);
-        you.removeAllItem(testItems[3]);
-        System.out.println(you.listBag());
-
-        System.out.println(new Item(0));
-        System.out.println(testItems[4]);
-
+        b = new Battler(Player.p, other);
+        b.start();
     }
 }

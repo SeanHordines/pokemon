@@ -6,6 +6,8 @@ public class Player extends Actor
         {"Badge 1", "Badge 2", "Badge 3", "Badge 4",
         "Badge 5", "Badge 6", "Badge 7", "Badge 8"};
 
+    public static Player p;
+
     private int money = 0;
     private Map<Item, Integer> bag = new HashMap<Item, Integer>();
     private boolean[] badges = new boolean[8];
@@ -71,6 +73,7 @@ public class Player extends Actor
             System.out.println("Item not found");
         }
     }
+
     public String listBag()
     {
         String out = "";
@@ -84,6 +87,11 @@ public class Player extends Actor
             out += String.format("%d. %s (x%d)\n", index, item.getKey().name, item.getValue());
         }
         return out.substring(0, out.length()-1);
+    }
+
+    public Map<Item, Integer> getBag()
+    {
+        return bag;
     }
 
     public void awardBadge(int b)
