@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+//non-specific instance of a Pokemon
+//stats common to all instances of BasePokemon
 public class BasePokemon{
     public static final String[] types = {"NONE",
         "NORMAL", "FIGHTING", "FLYING", "POISON", "GROUND",
@@ -9,17 +11,19 @@ public class BasePokemon{
         "WATER", "GRASS", "ELECTRIC", "PSYCHIC", "ICE",
         "DRAGON", "DARK", "FAIRY"};
 
-    public int dexNum;
+    public int dexNum; //national pokedex
     public String name;
-    public int type1, type2;
-    public int[] baseStats = new int[6];
-    public int BST;
+    public int type1, type2; //type 2 may be null upon creation
+    public int[] baseStats = new int[6]; //HP, Atk, Def, SpAtk, SpDef, Spd
+    public int BST; // base stat total aka sum of above
 
+    //construct based on nation pokedex number
     public BasePokemon(int n){
         dexNum = n;
         buildBasePokemon(n);
     }
 
+    //build pokemon by importing stats from file
     protected void buildBasePokemon(int n)
     {
         File statDex = new File("statdex.txt");
@@ -29,10 +33,13 @@ public class BasePokemon{
             Scanner dexReader = new Scanner(statDex);
             for(int i = 0; i < n+1; i++)
             {
+                //format of data:
+                //name, type1, type2, HP, Atk, Def, SpAtk, SpDef, Spd
                 data = dexReader.nextLine().split(" ");
             }
             dexReader.close();
 
+            //assign stats as data from file
             name = data[0];
             type1 = Integer.parseInt(data[1]);
             type2 = Integer.parseInt(data[2]);
@@ -49,6 +56,7 @@ public class BasePokemon{
         }
     }
 
+    //allows for printing via print(BasePokemon)
     public String toString()
     {
         return String.format("%s\nType(s): %s %s\n%s %s\n%s %s\n%s %s\n",

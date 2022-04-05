@@ -6,28 +6,38 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.lang.Thread;
 
+//use to simulate battle between two teams
 public class Battler
 {
+    //type effectiveness chart
     private float[][] effMatrix;
-    private TransientPokemon[] hero = new TransientPokemon[6], villain = new TransientPokemon[6];
+
+    private BattlePokemon[] hero = new BattlePokemon[6], villain = new BattlePokemon[6];
     private int currHero = 0, currVillain = 0;
     private static boolean ended = false;
 
+    //construct battle between two teams
     public Battler(Pokemon[] a, Pokemon[] b)
     {
         for(int i = 0; i < 6; i++)
         {
-            hero[i] = new TransientPokemon(a[i]);
-            villain[i] = new TransientPokemon(b[i]);
+            hero[i] = new BattlePokemon(a[i]);
+            villain[i] = new BattlePokemon(b[i]);
         }
     }
 
+    //run the battle simulation
     public void start()
     {
         System.out.println("Begin battle:");
+
+        //list active pokemon
         System.out.println(String.format("%s lv.%d VS %s lv.%d", hero[currHero].p.name, hero[currHero].p.level, villain[currVillain].p.name, villain[currVillain].p.level));
+
+        //loop until one side wins
         do
         {
+            //check if active pokemon are fainted
             if(hero[currHero].p.status == 1)
             {
                 currHero = promptSwitch();
@@ -38,21 +48,24 @@ public class Battler
                 currVillain += 1;
             }
 
+            //get the actions of hero and villain
             System.out.println();
             int[] heroAction = promptHeroAction();
             int[] villainAction = promptVillainAction();
-            if(heroAction[0] > 0)
+
+            if(heroAction[0] > 0) //not using a move
             {
                 execute(true, heroAction);
                 execute(false, villainAction);
             }
-            else if(villainAction[0] > 0)
+            else if(villainAction[0] > 0) //not using a move
             {
                 execute(false, villainAction);
                 execute(true, heroAction);
             }
-            else
+            else //using a move
             {
+                //check for priority on moves
                 if(hero[currHero].p.moves[heroAction[1]].priority > villain[currVillain].p.moves[heroAction[1]].priority)
                 {
                     execute(true, heroAction);
@@ -63,8 +76,9 @@ public class Battler
                     execute(false, villainAction);
                     execute(true, heroAction);
                 }
-                else
+                else //no priority difference
                 {
+                    //check speed of active pokemon
                     if(hero[currHero].tempStats[4] >= villain[currVillain].tempStats[4])
                     {
                         execute(true, heroAction);
@@ -78,14 +92,13 @@ public class Battler
                 }
             }
 
-            System.out.println();
+            //check if one side has won
             ended = checkEnded();
         }
         while(!ended);
-        // System.out.println(hero[currHero]);
-        // System.out.println(villain[currVillain]);
     }
 
+    //checks if all pokemon of either team are fainted
     private boolean checkEnded()
     {
         boolean checkHero = true;
@@ -96,12 +109,13 @@ public class Battler
             if(villain[i].p.dexNum != 0 && villain[i].p.status != 1){checkVillain = false;}
         }
 
-        if(checkHero){System.out.println("You lost the battle!");}
-        if(checkVillain){System.out.println("You won the battle!");}
+        if(checkHero){System.out.println("\nYou lost the battle!");}
+        if(checkVillain){System.out.println("\nYou won the battle!");}
 
         return (checkHero || checkVillain);
     }
 
+    //prompt input via the console
     private int[] promptHeroAction()
     {
         Scanner sc = new Scanner(System.in);
@@ -110,20 +124,21 @@ public class Battler
         System.out.println("1. Attack    3. Item");
         System.out.println("2. Switch    4. Flee");
         choices[0] = sc.nextInt() - 1;
-        if(choices[0] == 0)
+        if(choices[0] == 0) // use a move
         {
             choices[1] = promptMove();
         }
-        else if(choices[0] == 1)
+        else if(choices[0] == 1) //switch pokemon
         {
             choices[1] = promptSwitch();
         }
-        else if(choices[0] == 2)
+        else if(choices[0] == 2) //use an item
         {
             choices[1] = 0;
         }
-        else if(choices[0] == 3){choices[1] = 0;}
+        else if(choices[0] == 3){choices[1] = 0;} //flee
 
+        //check if input is valid
         if(choices[0] >= 4 || choices[0] < 0)
         {
             System.out.println("Invalid Selection...");
@@ -133,17 +148,22 @@ public class Battler
         return choices;
     }
 
+    //get action from opponent ai
     private int[] promptVillainAction()
     {
+        //super sophisticated algorithm that chooses the first move
         return new int[]{0, 0};
     }
 
+    //get move input from console
     private int promptMove()
     {
         Scanner sc = new Scanner(System.in);
         System.out.println("Choose move:");
         System.out.println(hero[currHero].p.listMoves());
         int choice = sc.nextInt() - 1;
+
+        //check if input is valid
         if(hero[currHero].p.moves[choice].index == 0 || choice >= 4 || choice < 0)
         {
             System.out.println("Invalid Selection...");
@@ -152,6 +172,7 @@ public class Battler
         return choice;
     }
 
+    //get switch input from console
     private int promptSwitch()
     {
         Scanner sc = new Scanner(System.in);
@@ -167,6 +188,8 @@ public class Battler
         }
 
         int choice = sc.nextInt() - 1;
+
+        //check if input is valid
         if(currHero == choice || choice >= 6 || choice < 0)
         {
             System.out.println("Invalid Selection...");
@@ -178,22 +201,25 @@ public class Battler
             return promptSwitch();
         }
 
+        System.out.println();
         System.out.println(String.format("%s retreated. Go %s!", hero[currHero].p.name,  hero[choice].p.name));
         return choice;
     }
 
+    //execute the specificed action for either the hero or the villain
     private void execute(boolean b, int[] action)
     {
+        //check if other team has already lost
         if(ended){return;}
 
-        if(action[0] == 0)
+        if(action[0] == 0) //use a move
         {
-            TransientPokemon attacker = b ? hero[currHero] : villain[currVillain];
-            if(attacker.p.status == 1){return;}
+            BattlePokemon attacker = b ? hero[currHero] : villain[currVillain];
             System.out.println();
+            if(attacker.p.status == 1){return;}
             useMove(b, action[1]);
         }
-        else if(action[0] == 1)
+        else if(action[0] == 1) //switch pokemon
         {
             System.out.println();
             if(b)
@@ -206,62 +232,93 @@ public class Battler
                 currVillain = action[1];
             }
         }
-        else if(action[0] == 2)
+        else if(action[0] == 2) //use item
         {
-            //use item
+            System.out.println("THIS IS NOT READY YET");
         }
-        else if(action[0] == 3)
+        else if(action[0] == 3) //flee
         {
             System.out.println();
-            System.out.println("Ran away from the fight...");
+            System.out.println(String.format("%s ran away from the fight...", b ? "You" : villain[currVillain].p.name));
             ended = true;
         }
 
         try{Thread.sleep(1500);}catch(Exception e){}
     }
 
+    //execute the use of a move
     private void useMove(boolean b, int moveIndex)
     {
-        TransientPokemon attacker = b ? hero[currHero] : villain[currVillain];
-        TransientPokemon defender = b ? villain[currVillain] : hero[currHero];
+        //determine who is attacking
+        BattlePokemon attacker = b ? hero[currHero] : villain[currVillain];
+        BattlePokemon defender = b ? villain[currVillain] : hero[currHero];
 
+        //get move from attacker
         Move m = attacker.p.moves[moveIndex];
+
+        //get the acc and eva
         float acc = (float) attacker.tempStats[5];
         float eva = (float) defender.tempStats[6];
         float chance = (acc / eva) * ((float) m.acc /100f);
+
+        //setup random
         Random rand = new Random();
+
         System.out.println(attacker.p.name + " attacked " +
             defender.p.name + " with " +
             m.name);
         try{Thread.sleep(750);}catch(Exception e){}
-        if(rand.nextFloat() < chance)
+
+        if(rand.nextFloat() < chance) //check if hits
         {
+            //use Atk and Def or use SpAtk and SpDef
             float ratio = (m.cat == 0)?
                 ((float) attacker.tempStats[0]) / ((float) defender.tempStats[1]) :
                 ((float) attacker.tempStats[2]) / ((float) defender.tempStats[3]);
 
+            //check for crit
             chance = (float) attacker.tempStats[7] / 10000f;
-            System.out.println(chance);
             boolean crit = (rand.nextFloat() < chance);
-            float adv = calcMod(attacker, defender, m, crit);
+
+            //calculate damage modifier
+            float mod = calcMod(attacker, defender, m, crit);
+
+            //calculate and deal damage
             float dmg = (2f * attacker.p.level / 5);
             dmg = ((dmg + 2) * m.power * ratio) / 50 + 2;
-            dmg *= adv * (rand.nextFloat(0.15f) + 0.85f);
-            try{Thread.sleep(750);}catch(Exception e){}
+            dmg *= mod * (rand.nextFloat(0.15f) + 0.85f);
             defender.damage((int) dmg);
         }
         else{System.out.println("The move missed!");}
     }
 
-    private float calcMod(TransientPokemon attacker, TransientPokemon defender, Move m, boolean crit)
+    //calculate the damage modifer of an attacking move
+    private float calcMod(BattlePokemon attacker, BattlePokemon defender, Move m, boolean crit)
     {
         float mod = 1.0f;
-        mod *= checkEff(m.type, defender.p.type1);
-        mod *= checkEff(m.type, defender.p.type2);
-        if(mod >= 2.0){System.out.println("It's super effective!");}
-        if(mod <= 0.5){System.out.println("It's not very effective...");}
-        if(mod == 0.0){System.out.println("It's had no effect!");}
+        //check type of move vs type(s) of defender
+        mod *= checkEff(m.type, defender.p.type1); //type1 check
+        mod *= checkEff(m.type, defender.p.type2); //type2 check
+        if(mod >= 2.0)
+        {
+            System.out.println("It's super effective!");
+            try{Thread.sleep(750);}catch(Exception e){}
+        }
+        if(mod <= 0.5)
+        {
+            System.out.println("It's not very effective...");
+            try{Thread.sleep(750);}catch(Exception e){}
+        }
+        if(mod == 0.0)
+        {
+            System.out.println("It's had no effect!");
+            try{Thread.sleep(750);}catch(Exception e){}
+        }
+
+        //check if type of move matches type of attacker (STAB)
         if(m.type == attacker.p.type1 || m.type == attacker.p.type2){mod *= 1.5f;}
+
+        //check for critical hit
         if(crit)
         {
             try{Thread.sleep(750);}catch(Exception e){}
@@ -271,12 +328,16 @@ public class Battler
         return mod;
     }
 
+    //pull data from effMatrix
     private float checkEff(int A, int D)
     {
+        //make sure matrix exists, if not then build it
         if(effMatrix == null){buildeffMatrix();}
+
         return effMatrix[A][D];
     }
 
+    //build effMatrix from file
     private void buildeffMatrix()
     {
         File em = new File("effMatrix.txt");

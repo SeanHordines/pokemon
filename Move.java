@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+//move known by pokemon
+//stats common to all moves of same index (except currPP)
 public class Move
 {
     protected static final String[] category = {"PHYSICAL", "SPECIAL", "STATUS"};
@@ -9,6 +11,7 @@ public class Move
     public String name;
     public int index, cat, type, power, acc, ppMax, ppCurr, priority;
 
+    //construct move from file index
     public Move(int n)
     {
         index = n;
@@ -19,6 +22,8 @@ public class Move
             Scanner dexReader = new Scanner(moveDex);
             for(int i = 0; i < n+1; i++)
             {
+                //format of data:
+                //name, cat, type, power, acc, priority, PP
                 data = dexReader.nextLine().split(" ");
             }
             dexReader.close();
@@ -38,6 +43,7 @@ public class Move
         }
     }
 
+    //construct custom move
     public Move(String n, int[] data)
     {
         index = 0;
@@ -51,6 +57,7 @@ public class Move
         ppCurr = ppMax;
     }
 
+    //allows for printing via print(Move)
     public String toString()
     {
         return String.format("%s\n%s %s\nPOW:  %3d\nACC:  %3d\nPP: %d/%d",
