@@ -7,7 +7,6 @@ public class Actor
     public Pokemon[] team = new Pokemon[6];
     public BattleAI ai;
 
-
     public Actor(String n)
     {
         name = n;

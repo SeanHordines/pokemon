@@ -14,12 +14,12 @@ public class Battler
     private boolean DELAY = true;
 
     //type effectiveness chart
-    private float[][] effMatrix;
+    private static float[][] effMatrix;
 
     private BattlePokemon[] hero = new BattlePokemon[6], villain = new BattlePokemon[6];
     private int currHero = 0, currVillain = 0;
     private String heroName, villainName = "";
-    private BattleAI heroAI = BattleAI.aiBasic, villainAI = BattleAI.aiBasic;
+    private BattleAI heroAI = BattleAI.aiBasic, villainAI = BattleAI.aiWild;
     private static boolean ended = false;
 
     //construct battle between two single pokemon
@@ -485,7 +485,7 @@ public class Battler
     }
 
     //pull data from effMatrix
-    private float checkEff(int A, int D)
+    public static float checkEff(int A, int D)
     {
         //make sure matrix exists, if not then build it
         if(effMatrix == null){buildeffMatrix();}
@@ -494,7 +494,7 @@ public class Battler
     }
 
     //build effMatrix from file
-    private void buildeffMatrix()
+    private static void buildeffMatrix()
     {
         File em = new File("effMatrix.txt");
         String[] data = {};

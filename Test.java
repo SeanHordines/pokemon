@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.Scanner;
 
 public class Test
 {
@@ -29,28 +29,17 @@ public class Test
         test3.status = 5;
         // System.out.println(test3);
 
-        // System.out.println(new Item(0));
-        // System.out.println(testItems[4]);
-
-        //create player party
+        //create player and party
+        System.out.print("Enter your name: ");
+        Scanner sc = new Scanner(System.in);
+        Actor.player.name = sc.next();
         Actor.player.addPokemon(test1);
         Actor.player.addPokemon(test3);
 
-        //setup and start battle
-        Battler b = new Battler(Actor.player, test2);
-        b.start();
-        // System.out.println(test2);
-        // System.out.println(you.listTeam());
-
-        Actor.player.refreshAll();
-        test2.refresh();
-        // System.out.println(test2);
-        // System.out.println(you.listTeam());
-
-        Actor other = new Actor("The other guy", 2);
+        Actor other = new Actor("The other guy");
         other.addPokemon(test2);
 
-        b = new Battler(Actor.player, other);
+        Battler b = new Battler(Actor.player, other);
         b.start();
     }
 }
