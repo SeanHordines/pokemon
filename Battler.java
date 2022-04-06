@@ -19,8 +19,8 @@ public class Battler
     private BattlePokemon[] hero = new BattlePokemon[6], villain = new BattlePokemon[6];
     private int currHero = 0, currVillain = 0;
     private String heroName, villainName = "";
+    private BattleAI heroAI = BattleAI.aiBasic, villainAI = BattleAI.aiBasic;
     private static boolean ended = false;
-    private Map<Item, Integer> bag;
 
     //construct battle between two single pokemon
     public Battler(Pokemon a, Pokemon b)
@@ -62,6 +62,8 @@ public class Battler
         }
         heroName = a.name;
         villainName = b.name;
+        heroAI = a.ai;
+        villainAI = b.ai;
     }
 
     //construct battle between Actor and team
@@ -73,6 +75,7 @@ public class Battler
             villain[i] = new BattlePokemon(b[i]);
         }
         heroName = a.name;
+        heroAI = a.ai;
     }
 
     //construct battle between Actor and single pokemon
@@ -83,6 +86,7 @@ public class Battler
             hero[i] = new BattlePokemon(a.team[i]);
         }
         heroName = a.name;
+        heroAI = a.ai;
 
         Arrays.fill(villain, new BattlePokemon(Pokemon.nullPokemon));
         villain[0] = new BattlePokemon(b);
@@ -191,9 +195,12 @@ public class Battler
         return (checkHero || checkVillain);
     }
 
-    //prompt input via the console
+    //prompt input via the console or hero ai
     private int[] promptHeroAction()
     {
+        //check if not a player
+        if(heroAI != Actor.player.ai){return heroAI.getAction(currHero, hero, villain[currVillain]);}
+
         Scanner sc = new Scanner(System.in);
         int[] choices = new int[2];
         System.out.println("Choose action:");
@@ -239,8 +246,7 @@ public class Battler
     //get action from opponent ai
     private int[] promptVillainAction()
     {
-        //super sophisticated algorithm that chooses the first move
-        return new int[]{1, 1};
+        return villainAI.getAction(currVillain, villain, hero[currHero]);
     }
 
     //get move input from console
