@@ -29,44 +29,28 @@ public class Test
         test3.status = 5;
         // System.out.println(test3);
 
-        //create a test player
-        Player.p = new Player("Your Name");
-
-        //test some items
-        Player.p.awardBadge(3);
-        // System.out.println(you.listBadges());
-        Item[] testItems = {new Item(1), new Item(2), new Item(3), new Item(4), new Item(5)};
-        Player.p.addItem(testItems[0]);
-        Player.p.addItem(testItems[1], 5);
-        Player.p.addItem(testItems[2], 20);
-        Player.p.addItem(testItems[3], 99);
-        Player.p.removeItem(testItems[1]);
-        Player.p.removeItem(testItems[2], 5);
-        Player.p.removeAllItem(testItems[3]);
-        // System.out.println(you.listBag());
-
         // System.out.println(new Item(0));
         // System.out.println(testItems[4]);
 
         //create player party
-        Player.p.addPokemon(test1);
-        Player.p.addPokemon(test3);
+        Actor.player.addPokemon(test1);
+        Actor.player.addPokemon(test3);
 
         //setup and start battle
-        Battler b = new Battler(Player.p, test2);
+        Battler b = new Battler(Actor.player, test2);
         b.start();
         // System.out.println(test2);
         // System.out.println(you.listTeam());
 
-        Player.p.refreshAll();
+        Actor.player.refreshAll();
         test2.refresh();
         // System.out.println(test2);
         // System.out.println(you.listTeam());
 
-        Actor other = new Actor("The other guy");
+        Actor other = new Actor("The other guy", 2);
         other.addPokemon(test2);
 
-        b = new Battler(Player.p, other);
+        b = new Battler(Actor.player, other);
         b.start();
     }
 }

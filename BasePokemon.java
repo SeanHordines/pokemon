@@ -35,7 +35,7 @@ public class BasePokemon{
             {
                 //format of data:
                 //name, type1, type2, HP, Atk, Def, SpAtk, SpDef, Spd
-                data = dexReader.nextLine().split(" ");
+                data = dexReader.nextLine().split(",");
             }
             dexReader.close();
 

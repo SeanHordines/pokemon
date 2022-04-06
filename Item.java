@@ -13,23 +13,19 @@ public class Item
     {
         index = n;
         File itemDex = new File("itemdex.txt");
-        String data = "";
+        String[] data = {};
         try
         {
             Scanner dexReader = new Scanner(itemDex);
             for(int i = 0; i < n+1; i++)
             {
                 //format of data:
-                //name, cat, type, power, acc, priority, PP
-                data = dexReader.nextLine();
+                data = dexReader.nextLine().split(",");
             }
             dexReader.close();
-
-            int s1 = data.indexOf(" ");
-            int s2 = data.indexOf(" ", s1+1);
-            name = data.substring(0, s1);
-            cat = Integer.parseInt(data.substring(s1+1, s2));
-            effect = data.substring(s2+1);
+            name = data[0];
+            cat = Integer.parseInt(data[2]);
+            effect = data[3];
         }
         catch (FileNotFoundException ex)
         {

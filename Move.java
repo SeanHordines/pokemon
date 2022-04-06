@@ -24,7 +24,7 @@ public class Move
             {
                 //format of data:
                 //name, cat, type, power, acc, priority, PP
-                data = dexReader.nextLine().split(" ");
+                data = dexReader.nextLine().split(",");
             }
             dexReader.close();
 

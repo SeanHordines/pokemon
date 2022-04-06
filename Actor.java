@@ -2,19 +2,38 @@ import java.util.Arrays;
 
 public class Actor
 {
+    public static Actor player = new Actor("Player Name", 0);
     public String name;
     public Pokemon[] team = new Pokemon[6];
+    public BattleAI ai;
+
 
     public Actor(String n)
     {
         name = n;
         Arrays.fill(team, Pokemon.nullPokemon);
+        ai = BattleAI.aiBasic;
+    }
+
+    public Actor(String n, int a)
+    {
+        name = n;
+        Arrays.fill(team, Pokemon.nullPokemon);
+        ai = new BattleAI(a);
     }
 
     public Actor(String n, Pokemon[] t)
     {
         name = n;
         team = t;
+        ai = BattleAI.aiBasic;
+    }
+
+    public Actor(String n, Pokemon[] t, int a)
+    {
+        name = n;
+        team = t;
+        ai = new BattleAI(a);
     }
 
     public void addPokemon(Pokemon p)

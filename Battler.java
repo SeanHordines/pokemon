@@ -350,13 +350,7 @@ public class Battler
 
     public int promptItem()
     {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Choose item:");
-        System.out.println(Player.p.listBag());
-        System.out.println("Use -X to view Pokemon or 0 to go back");
-
-        int choice = sc.nextInt();
-        return choice;
+        return 0;
     }
 
     //execute the specificed action for either the hero or the villain
@@ -504,7 +498,7 @@ public class Battler
             effMatrix = new float[18][18];
             for(int i = 0; i < 18; i++)
             {
-                data = emReader.nextLine().split(" ");
+                data = emReader.nextLine().split(",");
                 for(int j = 0; j < 18; j++)
                 {
                     effMatrix[i][j] = Float.parseFloat(data[j]);
