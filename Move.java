@@ -10,6 +10,7 @@ public class Move
 
     public String name;
     public int index, cat, type, power, acc, ppMax, ppCurr, priority;
+    public String effect;
 
     //construct move from file index
     public Move(int n)
@@ -20,21 +21,22 @@ public class Move
         try
         {
             Scanner dexReader = new Scanner(moveDex);
-            for(int i = 0; i < n+1; i++)
+            do
             {
                 //format of data:
-                //name, cat, type, power, acc, priority, PP
+                //num, name, effect, type, category, power, acc, pp
                 data = dexReader.nextLine().split(",");
             }
+            while(n != Integer.parseInt(data[0]));
             dexReader.close();
 
-            name = data[0];
-            cat = Integer.parseInt(data[1]);
-            type = Integer.parseInt(data[2]);
-            power = Integer.parseInt(data[3]);
-            acc = Integer.parseInt(data[4]);
-            priority = Integer.parseInt(data[5]);
-            ppMax = Integer.parseInt(data[6]);
+            name = data[1];
+            effect = data[2];
+            type = Integer.parseInt(data[3]);
+            cat = Integer.parseInt(data[4]);
+            power = Integer.parseInt(data[5]);
+            acc = Integer.parseInt(data[6]);
+            ppMax = Integer.parseInt(data[7]);
             ppCurr = ppMax;
         }
         catch (FileNotFoundException ex)

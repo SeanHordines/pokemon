@@ -31,22 +31,23 @@ public class BasePokemon{
         try
         {
             Scanner dexReader = new Scanner(statDex);
-            for(int i = 0; i < n+1; i++)
+            do
             {
                 //format of data:
-                //name, type1, type2, HP, Atk, Def, SpAtk, SpDef, Spd
+                //num, name, type1, type2, BST, HP, Atk, Def, SpAtk, SpDef, Spd, Gen
                 data = dexReader.nextLine().split(",");
             }
+            while(n != Integer.parseInt(data[0]));
             dexReader.close();
 
             //assign stats as data from file
-            name = data[0];
-            type1 = Integer.parseInt(data[1]);
-            type2 = Integer.parseInt(data[2]);
-            BST = 0;
+            name = data[1];
+            type1 = Integer.parseInt(data[2]);
+            type2 = Integer.parseInt(data[3]);
+            BST = Integer.parseInt(data[4]);;
             for(int i = 0; i < 6; i++)
             {
-                baseStats[i] = Integer.parseInt(data[i+3]);
+                baseStats[i] = Integer.parseInt(data[i+5]);
                 BST += baseStats[i];
             }
         }
