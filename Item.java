@@ -12,7 +12,7 @@ public class Item
     public Item(int n)
     {
         index = n;
-        File itemDex = new File("itemdex.txt");
+        File itemDex = new File("data/itemdex.txt");
         String[] data = {};
         try
         {

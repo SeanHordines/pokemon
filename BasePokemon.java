@@ -26,7 +26,7 @@ public class BasePokemon{
     //build pokemon by importing stats from file
     protected void buildBasePokemon(int n)
     {
-        File statDex = new File("statdex.txt");
+        File statDex = new File("data/statdex.txt");
         String[] data = {};
         try
         {

@@ -496,7 +496,7 @@ public class Battler
     //build effMatrix from file
     private static void buildeffMatrix()
     {
-        File em = new File("effMatrix.txt");
+        File em = new File("data/effMatrix.txt");
         String[] data = {};
         try
         {

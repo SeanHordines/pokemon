@@ -15,7 +15,7 @@ public class Move
     public Move(int n)
     {
         index = n;
-        File moveDex = new File("movedex.txt");
+        File moveDex = new File("data/movedex.txt");
         String[] data = {};
         try
         {

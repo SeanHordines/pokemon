@@ -14,7 +14,7 @@ public class BattleAI
     public BattleAI(int n)
     {
         index = n;
-        File aiFile = new File("aiFile.txt");
+        File aiFile = new File("data/aiFile.txt");
         String[] data = {};
         try
         {
