@@ -3,29 +3,52 @@ import javax.swing.*;
 
 public class HomebrewEngine
 {
-    private static JFrame window = null;
     private static final int width = 800, height = 600;
+    private static JFrame window = null;
+    private static BattleScene bs;
+    private static BattleText bt;
 
-    public static void main(String[] args)
+    public static void init()
     {
         makeWindow(width, height);
 
-        BattleScene bs = new BattleScene(width, (int) (0.8f * height));
+        bs = new BattleScene(width, (int) (0.8f * height));
         window.add(bs, BorderLayout.NORTH);
-        bs.setHero("sprites/back/3.png");
-        bs.setVillain("sprites/front/6.png");
 
-        BattleText bt = new BattleText(width, (int) (0.2f * height));
+        bt = new BattleText(width, (int) (0.2f * height));
         window.add(bt, BorderLayout.SOUTH);
-        bt.setText("Let's Fight!");
 
         window.pack();
         window.setVisible(true);
-
-        bs.setHero("sprites/back/9.png");
     }
 
-    public static void makeWindow(int w, int h)
+    public static void close()
+    {
+        window.setVisible(false);
+        window.dispose();
+    }
+
+    public static void setSprite(String path, Boolean hero)
+    {
+        if(hero)
+        {
+            bs.setHero(path);
+            window.repaint();
+        }
+        else
+        {
+            bs.setVillain(path);
+            window.repaint();
+        }
+    }
+
+    public static void setText(String t)
+    {
+        bt.setText(t);
+        window.repaint();
+    }
+
+    private static void makeWindow(int w, int h)
     {
         if(window == null)
         {

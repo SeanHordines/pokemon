@@ -98,14 +98,22 @@ public class Battler
         ended = false;
         if(villainName == "")
         {
-            System.out.println(String.format("A wild %s appeared!", villain[currVillain].p.name));
+            HomebrewEngine.setText(String.format("A wild %s appeared!", villain[currVillain].p.name));
         }
         else
         {
-            System.out.println(String.format("%s wants to Battle!", villainName));
-            System.out.println(String.format("%s sent out %s", villainName, villain[currVillain].p.nickname));
+            HomebrewEngine.setText(String.format("%s wants to Battle!", villainName));
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setText(String.format("%s sent out %s.", villainName, villain[currVillain].p.nickname));
         }
-        System.out.println(String.format("Go %s!", hero[currHero].p.nickname));
+        String path = String.format("sprites/front/%d.png", villain[currVillain].p.dexNum);
+        HomebrewEngine.setSprite(path, false);
+        try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+
+        HomebrewEngine.setText(String.format("Go %s!", hero[currHero].p.nickname));
+        path = String.format("sprites/back/%d.png", hero[currHero].p.dexNum);
+        HomebrewEngine.setSprite(path, true);
+        try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
 
         //loop until one side wins
         do
@@ -185,11 +193,13 @@ public class Battler
 
         if(checkVillain)
         {
-            System.out.println(String.format("\n%s won the battle!", heroName));
+            HomebrewEngine.setText(String.format("%s won the battle!", heroName));
+            try{if(DELAY){Thread.sleep(3000);}}catch(Exception e){}
         }
         else if(checkHero)
         {
-            System.out.println(String.format("\n%s lost the battle!", heroName));
+            HomebrewEngine.setText(String.format("%s lost the battle!", heroName));
+            try{if(DELAY){Thread.sleep(3000);}}catch(Exception e){}
         }
 
         return (checkHero || checkVillain);
@@ -349,8 +359,7 @@ public class Battler
             return promptSwitch();
         }
 
-        System.out.println();
-        System.out.println(String.format("%s retreated. Go %s!", hero[currHero].p.nickname,  hero[choice-1].p.nickname));
+        HomebrewEngine.setText(String.format("%s retreated. Go %s!", hero[currHero].p.nickname,  hero[choice-1].p.nickname));
         return choice;
     }
 
@@ -368,37 +377,38 @@ public class Battler
         if(action[0] == 1) //use a move
         {
             BattlePokemon attacker = b ? hero[currHero] : villain[currVillain];
-            System.out.println();
             if(attacker.p.status == 1){return;}
             useMove(b, action[1]-1);
         }
         else if(action[0] == 2) //switch pokemon
         {
+            String path;
             if(b)
             {
                 currHero = action[1]-1;
+                path = String.format("sprites/back/%d.png", hero[currHero].p.dexNum);
             }
             else
             {
-                System.out.println(String.format("%s (%s) switched out for %s (%s).",
+                HomebrewEngine.setText(String.format("%s (%s) switched out for %s (%s).",
                     villain[currVillain].p.nickname, villain[currVillain].p.name,
                     villain[action[1]-1].p.nickname, villain[action[1]-1].p.name));
                 currVillain = action[1]-1;
+                path = String.format("sprites/front/%d.png", villain[currVillain].p.dexNum);
             }
+            HomebrewEngine.setSprite(path, b);
         }
         else if(action[0] == 3) //use item
         {
-            System.out.println();
             System.out.println("This doesn't work yet");
         }
         else if(action[0] == 4) //flee
         {
-            System.out.println();
-            System.out.println(String.format("%s ran away from the fight...", b ? "You" : villain[currVillain].p.name));
+            HomebrewEngine.setText(String.format("%s ran away from the fight...", b ? "You" : villain[currVillain].p.name));
             ended = true;
         }
 
-        try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+        try{if(DELAY){Thread.sleep(3000);}}catch(Exception e){}
     }
 
     //execute the use of a move
@@ -420,10 +430,10 @@ public class Battler
         //setup random
         Random rand = new Random();
 
-        System.out.println(attacker.p.nickname + " attacked " +
+        HomebrewEngine.setText(attacker.p.nickname + " attacked " +
             defender.p.nickname + " with " +
             m.name);
-        try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
+        try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
 
         if(rand.nextFloat() < chance) //check if hits
         {
@@ -457,18 +467,18 @@ public class Battler
         mod *= checkEff(m.type, defender.p.type2); //type2 check
         if(mod >= 2.0)
         {
-            System.out.println("It's super effective!");
-            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
+            HomebrewEngine.setText("It's super effective!");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
         }
         if(mod <= 0.5)
         {
-            System.out.println("It's not very effective...");
-            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
+            HomebrewEngine.setText("It's not very effective...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
         }
         if(mod == 0.0)
         {
-            System.out.println("It's had no effect!");
-            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
+            HomebrewEngine.setText("It's had no effect!");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
         }
 
         //check if type of move matches type of attacker (STAB)
@@ -477,8 +487,8 @@ public class Battler
         //check for critical hit
         if(crit)
         {
-            try{if(DELAY){Thread.sleep(750);}}catch(Exception e){}
-            System.out.println("Critical hit!");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setText("Critical hit!");
             mod *= 2f;
         }
         return mod;

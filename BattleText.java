@@ -4,7 +4,7 @@ import javax.swing.*;
 public class BattleText extends JPanel
 {
     private int width, height;
-    private JLabel text = new JLabel();
+    private JTextArea text = new JTextArea();
 
     public BattleText(int w, int h)
     {
@@ -18,10 +18,11 @@ public class BattleText extends JPanel
     public void setText(String t)
     {
         remove(text);
-        text = new JLabel(t);
+        text = new JTextArea(t);
         text.setBounds(10, 10, width-20, height-20);
         text.setFont(new Font("Courier New", Font.PLAIN, 30));
-        text.setVerticalAlignment(JLabel.TOP);
+        text.setLineWrap(true);
+        // text.setVerticalAlignment(JTextArea.TOP);
         add(text);
     }
 }
