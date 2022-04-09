@@ -68,6 +68,20 @@ public class HomebrewEngine
         window.repaint();
     }
 
+    public static void showPokemon(BattlePokemon p)
+    {
+        ms.showPokemon(p);
+        addMenuButton("Back", 0, 680, 10, 110, 30, false);
+        window.repaint();
+    }
+
+    public static void showMove(Move m)
+    {
+        ms.showMove(m);
+        addMenuButton("Back", 0, 680, 10, 110, 30, false);
+        window.repaint();
+    }
+
     public static int getMenuAction()
     {
         int out = ms.action;
@@ -80,7 +94,6 @@ public class HomebrewEngine
         ms.removeAll();
         window.repaint();
     }
-
 
     private static void makeWindow(int w, int h)
     {

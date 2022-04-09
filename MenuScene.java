@@ -27,4 +27,26 @@ public class MenuScene extends JPanel
         // text.setVerticalAlignment(JTextArea.TOP);
         add(text);
     }
+
+    public void showPokemon(BattlePokemon p)
+    {
+        remove(text);
+        text = new JTextArea(p.toString());
+        text.setEditable(false);
+        text.setBounds(10, 10, width-140, 280);
+        text.setFont(new Font("Courier New", Font.PLAIN, 30));
+        text.setLineWrap(true);
+        add(text);
+    }
+
+    public void showMove(Move m)
+    {
+        remove(text);
+        text = new JTextArea(m.toString());
+        text.setEditable(false);
+        text.setBounds(10, 10, width-140, 280);
+        text.setFont(new Font("Courier New", Font.PLAIN, 30));
+        text.setLineWrap(true);
+        add(text);
+    }
 }

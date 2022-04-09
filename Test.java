@@ -32,10 +32,10 @@ public class Test
         Actor.player.addPokemon(test1);
         Actor.player.addPokemon(test3);
 
-        Actor other = new Actor("Rival Asswipe");
-        other.addPokemon(test2);
+        // Actor other = new Actor("Rival Asswipe");
+        // other.addPokemon(test2);
 
-        Battler b = new Battler(Actor.player, other);
+        Battler b = new Battler(Actor.player, test2);
         b.start();
 
         HomebrewEngine.close();

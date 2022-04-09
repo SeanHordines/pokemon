@@ -321,7 +321,14 @@ public class Battler
             }
             else
             {
-                System.out.println(moves[choice-1]);
+                HomebrewEngine.showMove(moves[choice-1]);
+                choice = -9;
+                do
+                {
+                    choice = HomebrewEngine.getMenuAction();
+                    try{Thread.sleep(100);}catch(Exception e){}
+                }
+                while(choice == -9);
                 return promptMove();
             }
         }
@@ -397,7 +404,14 @@ public class Battler
             }
             else
             {
-                System.out.println(hero[choice-1]);
+                HomebrewEngine.showPokemon(hero[choice-1]);
+                choice = -9;
+                do
+                {
+                    choice = HomebrewEngine.getMenuAction();
+                    try{Thread.sleep(100);}catch(Exception e){}
+                }
+                while(choice == -9);
                 return promptSwitch();
             }
         }
