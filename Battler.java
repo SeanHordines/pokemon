@@ -1,11 +1,10 @@
 import java.io.*;
 import java.util.*;
 import java.util.Random;
+import java.util.Arrays;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.lang.Thread;
-import java.util.Arrays;
 
 //use to simulate battle between two teams
 public class Battler
@@ -98,19 +97,19 @@ public class Battler
         ended = false;
         if(villainName == "")
         {
-            HomebrewEngine.setText(String.format("A wild %s appeared!", villain[currVillain].p.name));
+            HomebrewEngine.setBattleText(String.format("A wild %s appeared!", villain[currVillain].p.name));
         }
         else
         {
-            HomebrewEngine.setText(String.format("%s wants to Battle!", villainName));
+            HomebrewEngine.setBattleText(String.format("%s wants to Battle!", villainName));
             try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
-            HomebrewEngine.setText(String.format("%s sent out %s.", villainName, villain[currVillain].p.nickname));
+            HomebrewEngine.setBattleText(String.format("%s sent out %s.", villainName, villain[currVillain].p.nickname));
         }
         String path = String.format("sprites/front/%d.png", villain[currVillain].p.dexNum);
         HomebrewEngine.setSprite(path, false);
         try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
 
-        HomebrewEngine.setText(String.format("Go %s!", hero[currHero].p.nickname));
+        HomebrewEngine.setBattleText(String.format("Go %s!", hero[currHero].p.nickname));
         path = String.format("sprites/back/%d.png", hero[currHero].p.dexNum);
         HomebrewEngine.setSprite(path, true);
         try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
@@ -129,7 +128,6 @@ public class Battler
             }
 
             //get the actions of hero and villain
-            System.out.println();
             int[] heroAction = promptHeroAction();
             int[] villainAction = promptVillainAction();
 
@@ -193,12 +191,12 @@ public class Battler
 
         if(checkVillain)
         {
-            HomebrewEngine.setText(String.format("%s won the battle!", heroName));
+            HomebrewEngine.setBattleText(String.format("%s won the battle!", heroName));
             try{if(DELAY){Thread.sleep(3000);}}catch(Exception e){}
         }
         else if(checkHero)
         {
-            HomebrewEngine.setText(String.format("%s lost the battle!", heroName));
+            HomebrewEngine.setBattleText(String.format("%s lost the battle!", heroName));
             try{if(DELAY){Thread.sleep(3000);}}catch(Exception e){}
         }
 
@@ -211,12 +209,24 @@ public class Battler
         //check if not a player
         if(heroAI != Actor.player.ai){return heroAI.getAction(currHero, hero, villain[currVillain]);}
 
-        Scanner sc = new Scanner(System.in);
         int[] choices = new int[2];
-        System.out.println("Choose action:");
-        System.out.println("1. Attack    3. Item");
-        System.out.println("2. Switch    4. Flee");
-        choices[0] = sc.nextInt();
+
+        HomebrewEngine.setMenuText("Choose an action:");
+        HomebrewEngine.addMenuButton("Attack", 1, 10, 50, 385, 115, false);
+        HomebrewEngine.addMenuButton("Switch", 2, 405, 50, 385, 115, false);
+        HomebrewEngine.addMenuButton("Item", 3, 10, 175, 385, 115, false);
+        HomebrewEngine.addMenuButton("Flee", 4, 405, 175, 385, 115, false);
+
+        do
+        {
+            choices[0] = HomebrewEngine.getMenuAction();
+            try{Thread.sleep(100);}catch(Exception e){}
+        }
+        while(choices[0] == -9);
+
+        HomebrewEngine.clearMenu();
+
+
         if(choices[0] == 1) // use a move
         {
             choices[1] = promptMove();
@@ -262,29 +272,47 @@ public class Battler
     //get move input from console
     private int promptMove()
     {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Choose move:");
-        System.out.println(hero[currHero].p.listMoves());
-        System.out.println("Use -X to view move or 0 to go back");
-        int choice = sc.nextInt();
+        Move[] moves = hero[currHero].p.moves;
+        int choice = 0;
 
-        //check if go back is selected
-        if(choice == 0){return choice;}
+        HomebrewEngine.setMenuText("Choose a move:");
+        int[] x = new int[]{10, 405, 10, 405}; int[] y = new int[]{50, 50, 175, 175};
+        int w = 385; int h = 110;
+        for(int i = 0; i < 4; i++)
+        {
+            if(moves[i].index != 0)
+            {
+                HomebrewEngine.addMenuButton(moves[i].name.replace("NULL", "(empty)"), i+1, x[i]+h, y[i], w-h, h, false);
+                HomebrewEngine.addMenuButton("View", -(i+1), x[i], y[i], h, h, false);
+            }
+        }
+        HomebrewEngine.addMenuButton("Back", 0, 680, 10, 110, 30, false);
+
+        do
+        {
+            choice = HomebrewEngine.getMenuAction();
+            try{Thread.sleep(100);}catch(Exception e){}
+        }
+        while(choice == -9);
+
+        HomebrewEngine.clearMenu();
 
         if(choice < 0 &&  choice >= -4)
         {
             choice *= -1;
-            if(hero[currHero].p.moves[choice-1].index == 0)
+            if(moves[choice-1].index == 0)
             {
                 System.out.println("Invalid Selection...");
                 return promptMove();
             }
             else
             {
-                System.out.println(hero[currHero].p.moves[choice-1]);
+                System.out.println(moves[choice-1]);
                 return promptMove();
             }
         }
+
+        if(choice == 0){return choice;}
 
         //check if input is valid
         else if(choice > 4 || choice < 1)
@@ -292,12 +320,12 @@ public class Battler
             System.out.println("Invalid Selection...");
             return promptMove();
         }
-        else if(hero[currHero].p.moves[choice-1].index == 0)
+        else if(moves[choice-1].index == 0)
         {
             System.out.println("Invalid Selection...");
             return promptMove();
         }
-        else if(hero[currHero].p.moves[choice-1].ppCurr == 0)
+        else if(moves[choice-1].ppCurr == 0)
         {
             System.out.println("Selected move is out of PP...");
             return promptMove();
@@ -308,21 +336,31 @@ public class Battler
     //get switch input from console
     private int promptSwitch()
     {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Choose who to switch:");
-        for(int i = 0; i < 6; i++)
-        {
-            System.out.print((hero[i].p.dexNum != 0) ?
-                String.format("%d. %s (%s) lv.%d (%d/%d) %s",
-                    i+1, hero[i].p.nickname, hero[i].p.name, hero[i].p.level,
-                    hero[i].p.currHP, hero[i].p.stats[0], hero[i].p.statuses[hero[i].p.status].replace("NONE", "")) :
-                String.format("%d. %s", i+1, "(empty)"));
-            if(i == currHero){System.out.println(" *Active*");}
-            else{System.out.println();}
-        }
-        System.out.println("Use -X to view Pokemon or 0 to go back");
+        int choice = 0;
 
-        int choice = sc.nextInt();
+        HomebrewEngine.setMenuText("Choose a Pokemon:");
+        int x = 10; int y = 50; int w = 780; int h = 40;
+        for(int i = 0; i < 4; i++)
+        {
+            if(hero[i].p.dexNum != 0)
+            {
+                String text = String.format("%s lv.%d (%d/%d) %s",
+                    hero[i].p.name, hero[i].p.level, hero[i].p.currHP, hero[i].p.stats[0],
+                    hero[i].p.statuses[hero[i].p.status].replace("NONE", ""));
+                HomebrewEngine.addMenuButton(text, i+1, x+110, y+i*(h+10), w-110, h, true);
+                HomebrewEngine.addMenuButton("View", -(i+1), x, y+i*(h+10), 110, h, false);
+            }
+        }
+        HomebrewEngine.addMenuButton("Back", 0, 680, 10, 110, 30, false);
+
+        do
+        {
+            choice = HomebrewEngine.getMenuAction();
+            try{Thread.sleep(100);}catch(Exception e){}
+        }
+        while(choice == -9);
+
+        HomebrewEngine.clearMenu();
 
         //check if go back is selected
         if(choice == 0){return choice;}
@@ -359,7 +397,7 @@ public class Battler
             return promptSwitch();
         }
 
-        HomebrewEngine.setText(String.format("%s retreated. Go %s!", hero[currHero].p.nickname,  hero[choice-1].p.nickname));
+        HomebrewEngine.setBattleText(String.format("%s retreated. Go %s!", hero[currHero].p.nickname,  hero[choice-1].p.nickname));
         return choice;
     }
 
@@ -390,7 +428,7 @@ public class Battler
             }
             else
             {
-                HomebrewEngine.setText(String.format("%s (%s) switched out for %s (%s).",
+                HomebrewEngine.setBattleText(String.format("%s (%s) switched out for %s (%s).",
                     villain[currVillain].p.nickname, villain[currVillain].p.name,
                     villain[action[1]-1].p.nickname, villain[action[1]-1].p.name));
                 currVillain = action[1]-1;
@@ -404,7 +442,7 @@ public class Battler
         }
         else if(action[0] == 4) //flee
         {
-            HomebrewEngine.setText(String.format("%s ran away from the fight...", b ? "You" : villain[currVillain].p.name));
+            HomebrewEngine.setBattleText(String.format("%s ran away from the fight...", b ? "You" : villain[currVillain].p.name));
             ended = true;
         }
 
@@ -430,7 +468,7 @@ public class Battler
         //setup random
         Random rand = new Random();
 
-        HomebrewEngine.setText(attacker.p.nickname + " attacked " +
+        HomebrewEngine.setBattleText(attacker.p.nickname + " attacked " +
             defender.p.nickname + " with " +
             m.name);
         try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
@@ -467,17 +505,17 @@ public class Battler
         mod *= checkEff(m.type, defender.p.type2); //type2 check
         if(mod >= 2.0)
         {
-            HomebrewEngine.setText("It's super effective!");
+            HomebrewEngine.setBattleText("It's super effective!");
             try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
         }
         if(mod <= 0.5)
         {
-            HomebrewEngine.setText("It's not very effective...");
+            HomebrewEngine.setBattleText("It's not very effective...");
             try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
         }
         if(mod == 0.0)
         {
-            HomebrewEngine.setText("It's had no effect!");
+            HomebrewEngine.setBattleText("It's had no effect!");
             try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
         }
 
@@ -488,7 +526,7 @@ public class Battler
         if(crit)
         {
             try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
-            HomebrewEngine.setText("Critical hit!");
+            HomebrewEngine.setBattleText("Critical hit!");
             mod *= 2f;
         }
         return mod;

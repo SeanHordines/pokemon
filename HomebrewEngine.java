@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class HomebrewEngine
@@ -7,6 +8,7 @@ public class HomebrewEngine
     private static JFrame window = null;
     private static BattleScene bs;
     private static BattleText bt;
+    private static MenuScene ms;
 
     public static void init()
     {
@@ -16,7 +18,10 @@ public class HomebrewEngine
         window.add(bs, BorderLayout.NORTH);
 
         bt = new BattleText(width, (int) (0.2f * height));
-        window.add(bt, BorderLayout.SOUTH);
+        window.add(bt, BorderLayout.CENTER);
+
+        ms = new MenuScene(width, (int) (0.5f * height));
+        window.add(ms, BorderLayout.SOUTH);
 
         window.pack();
         window.setVisible(true);
@@ -30,23 +35,52 @@ public class HomebrewEngine
 
     public static void setSprite(String path, Boolean hero)
     {
-        if(hero)
-        {
-            bs.setHero(path);
-            window.repaint();
-        }
-        else
-        {
-            bs.setVillain(path);
-            window.repaint();
-        }
-    }
-
-    public static void setText(String t)
-    {
-        bt.setText(t);
+        if(hero){bs.setHero(path);}
+        else{bs.setVillain(path);}
         window.repaint();
     }
+
+    public static void setBattleText(String text)
+    {
+        bt.setText(text);
+        window.repaint();
+    }
+
+    public static void setMenuText(String text)
+    {
+        ms.setText(text);
+        window.repaint();
+    }
+
+    public static void addMenuButton(String text, int a, int x, int y, int w, int h, Boolean left)
+    {
+        JButton b = new JButton(text);
+
+        b.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                ms.action = a;}});
+
+        b.setBounds(x, y, w, h);
+        b.setFont(new Font("Courier New", Font.PLAIN, 30));
+        if(left){b.setHorizontalAlignment(SwingConstants.LEFT);}
+
+        ms.add(b);
+        window.repaint();
+    }
+
+    public static int getMenuAction()
+    {
+        int out = ms.action;
+        ms.action = -9;
+        return out;
+    }
+
+    public static void clearMenu()
+    {
+        ms.removeAll();
+        window.repaint();
+    }
+
 
     private static void makeWindow(int w, int h)
     {
