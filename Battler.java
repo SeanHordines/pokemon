@@ -95,6 +95,7 @@ public class Battler
     public void start()
     {
         ended = false;
+        if(heroName == ""){heroName = "You";}
         if(villainName == "")
         {
             HomebrewEngine.setBattleText(String.format("A wild %s appeared!", villain[currVillain].p.name));
@@ -113,6 +114,7 @@ public class Battler
         path = String.format("sprites/back/%d.png", hero[currHero].p.dexNum);
         HomebrewEngine.setSprite(path, true);
         try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+        HomebrewEngine.setBattleText("");
 
         //loop until one side wins
         do
@@ -120,7 +122,13 @@ public class Battler
             //check if active pokemon are fainted
             if(hero[currHero].p.status == 1)
             {
-                execute(true, new int[]{2, promptSwitch()});
+                int s = 0;
+                do
+                {
+                 s = promptSwitch();
+                }
+                while(s == 0);
+                execute(true, new int[]{2, s});
             }
             if(villain[currVillain].p.status == 1)
             {
@@ -243,7 +251,9 @@ public class Battler
         {
             if(villainName != "")
             {
-                System.out.println("Cannot flee from trainer battle...");
+                HomebrewEngine.setBattleText("Cannot flee from trainer battle...");
+                try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+                HomebrewEngine.setBattleText("");
                 return promptHeroAction();
             }
             else
@@ -253,7 +263,9 @@ public class Battler
         }
         else
         {
-            System.out.println("Invalid Selection...");
+            HomebrewEngine.setBattleText("Invalid Selection...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setBattleText("");
             return promptHeroAction();
         }
 
@@ -302,7 +314,9 @@ public class Battler
             choice *= -1;
             if(moves[choice-1].index == 0)
             {
-                System.out.println("Invalid Selection...");
+                HomebrewEngine.setBattleText("Invalid Selection...");
+                try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+                HomebrewEngine.setBattleText("");
                 return promptMove();
             }
             else
@@ -317,17 +331,23 @@ public class Battler
         //check if input is valid
         else if(choice > 4 || choice < 1)
         {
-            System.out.println("Invalid Selection...");
+            HomebrewEngine.setBattleText("Invalid Selection...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setBattleText("");
             return promptMove();
         }
         else if(moves[choice-1].index == 0)
         {
-            System.out.println("Invalid Selection...");
+            HomebrewEngine.setBattleText("Invalid Selection...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setBattleText("");
             return promptMove();
         }
         else if(moves[choice-1].ppCurr == 0)
         {
-            System.out.println("Selected move is out of PP...");
+            HomebrewEngine.setBattleText("Invalid Selection...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setBattleText("");
             return promptMove();
         }
         return choice;
@@ -370,7 +390,9 @@ public class Battler
             choice *= -1;
             if(hero[choice-1].p.dexNum == 0)
             {
-                System.out.println("Invalid Selection...");
+                HomebrewEngine.setBattleText("Invalid Selection...");
+                try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+                HomebrewEngine.setBattleText("");
                 return promptSwitch();
             }
             else
@@ -383,17 +405,23 @@ public class Battler
         //check if input is valid
         else if(currHero == choice-1 || choice >= 6 || choice < 0)
         {
-            System.out.println("Invalid Selection...");
+            HomebrewEngine.setBattleText("Invalid Selection...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setBattleText("");
             return promptSwitch();
         }
         else if(hero[choice-1].p.dexNum == 0)
         {
-            System.out.println("Invalid Selection...");
+            HomebrewEngine.setBattleText("Invalid Selection...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setBattleText("");
             return promptSwitch();
         }
         else if(hero[choice-1].p.status == 1)
         {
-            System.out.println("Invalid Selection...");
+            HomebrewEngine.setBattleText("Invalid Selection...");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+            HomebrewEngine.setBattleText("");
             return promptSwitch();
         }
 
@@ -447,6 +475,7 @@ public class Battler
         }
 
         try{if(DELAY){Thread.sleep(3000);}}catch(Exception e){}
+        HomebrewEngine.setBattleText("");
     }
 
     //execute the use of a move
@@ -467,10 +496,8 @@ public class Battler
 
         //setup random
         Random rand = new Random();
-
-        HomebrewEngine.setBattleText(attacker.p.nickname + " attacked " +
-            defender.p.nickname + " with " +
-            m.name);
+        HomebrewEngine.setBattleText(String.format("%s attacked %s with %s.",
+            attacker.p.nickname, defender.p.nickname, m.name));
         try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
 
         if(rand.nextFloat() < chance) //check if hits
@@ -492,8 +519,16 @@ public class Battler
             dmg = ((dmg + 2) * m.power * ratio) / 50 + 2;
             dmg *= mod * (rand.nextFloat(0.15f) + 0.85f);
             defender.damage((int) dmg);
+            HomebrewEngine.setBattleText(defender.p.nickname + " took " + (int) dmg +
+                " damage. (" + defender.p.currHP + "/" + defender.p.stats[0] + "HP)");
+            if(defender.p.currHP == 0)
+            {
+                defender.p.status = 1;
+                try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
+                HomebrewEngine.setBattleText(defender.p.nickname + " fainted!");
+            }
         }
-        else{System.out.println("The move missed!");}
+        else{HomebrewEngine.setBattleText("The move missed!");}
     }
 
     //calculate the damage modifer of an attacking move
@@ -525,8 +560,8 @@ public class Battler
         //check for critical hit
         if(crit)
         {
-            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
             HomebrewEngine.setBattleText("Critical hit!");
+            try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
             mod *= 2f;
         }
         return mod;

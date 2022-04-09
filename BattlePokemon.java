@@ -86,12 +86,6 @@ public class BattlePokemon
     public void damage(int dmg)
     {
         p.currHP = Math.max(0, p.currHP - dmg);
-        HomebrewEngine.setBattleText(p.nickname + " took " + dmg + " damage. (" + p.currHP + "/" + p.stats[0] + "HP)");
-        if(p.currHP == 0)
-        {
-            p.status = 1;
-            HomebrewEngine.setBattleText(p.nickname + " fainted!");
-        }
     }
 
     //calculate effective stats given stat changes

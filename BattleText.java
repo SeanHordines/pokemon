@@ -19,6 +19,7 @@ public class BattleText extends JPanel
     {
         remove(text);
         text = new JTextArea(t);
+        text.setEditable(false);
         text.setBounds(10, 10, width-20, height-20);
         text.setFont(new Font("Courier New", Font.PLAIN, 30));
         text.setLineWrap(true);

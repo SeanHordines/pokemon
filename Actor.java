@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class Actor
 {
-    public static Actor player = new Actor("Player Name", 0);
+    public static Actor player = new Actor("", 0);
     public String name;
     public Pokemon[] team = new Pokemon[6];
     public BattleAI ai;

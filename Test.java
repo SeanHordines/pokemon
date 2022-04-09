@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Test
 {
     public static void main(String[] args)
@@ -31,10 +29,6 @@ public class Test
         test3.status = 5;
         // System.out.println(test3);
 
-        //create player and party
-        System.out.print("Enter your name: ");
-        Scanner sc = new Scanner(System.in);
-        Actor.player.name = sc.next();
         Actor.player.addPokemon(test1);
         Actor.player.addPokemon(test3);
 
