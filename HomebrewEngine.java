@@ -9,6 +9,8 @@ public class HomebrewEngine
     private static BattleScene bs;
     private static BattleText bt;
     private static MenuScene ms;
+    private static HealthBar heroHP = new HealthBar(Pokemon.nullPokemon);
+    private static HealthBar villainHP = new HealthBar(Pokemon.nullPokemon);
 
     public static void init()
     {
@@ -37,6 +39,32 @@ public class HomebrewEngine
     {
         if(hero){bs.setHero(path);}
         else{bs.setVillain(path);}
+        window.repaint();
+    }
+
+    public static void createHealthBar(Pokemon p, Boolean hero)
+    {
+        if(hero)
+        {
+            bs.remove(heroHP);
+            heroHP = new HealthBar(p);
+            heroHP.setBounds(340, 400, 450, 70);
+            bs.add(heroHP);
+        }
+        else
+        {
+            bs.remove(villainHP);
+            villainHP = new HealthBar(p);
+            villainHP.setBounds(10, 10, 450, 70);
+            bs.add(villainHP);
+        }
+        window.repaint();
+    }
+
+    public static void updateHealthBar(int newHP, Boolean hero)
+    {
+        if(hero){heroHP.setHP(newHP);}
+        else{villainHP.setHP(newHP);}
         window.repaint();
     }
 

@@ -108,11 +108,13 @@ public class Battler
         }
         String path = String.format("sprites/front/%d.png", villain[currVillain].p.dexNum);
         HomebrewEngine.setSprite(path, false);
+        HomebrewEngine.createHealthBar(villain[currVillain].p, false);
         try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
 
         HomebrewEngine.setBattleText(String.format("Go %s!", hero[currHero].p.nickname));
         path = String.format("sprites/back/%d.png", hero[currHero].p.dexNum);
         HomebrewEngine.setSprite(path, true);
+        HomebrewEngine.createHealthBar(hero[currHero].p, true);
         try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
         HomebrewEngine.setBattleText("");
 
@@ -463,10 +465,12 @@ public class Battler
         else if(action[0] == 2) //switch pokemon
         {
             String path;
+            Pokemon switchTarget;
             if(b)
             {
                 currHero = action[1]-1;
                 path = String.format("sprites/back/%d.png", hero[currHero].p.dexNum);
+                switchTarget = hero[currHero].p;
             }
             else
             {
@@ -475,8 +479,11 @@ public class Battler
                     villain[action[1]-1].p.nickname, villain[action[1]-1].p.name));
                 currVillain = action[1]-1;
                 path = String.format("sprites/front/%d.png", villain[currVillain].p.dexNum);
+                switchTarget = villain[currVillain].p;
             }
             HomebrewEngine.setSprite(path, b);
+            HomebrewEngine.createHealthBar(switchTarget, b);
+
         }
         else if(action[0] == 3) //use item
         {
@@ -533,13 +540,13 @@ public class Battler
             dmg = ((dmg + 2) * m.power * ratio) / 50 + 2;
             dmg *= mod * (rand.nextFloat(0.15f) + 0.85f);
             defender.damage((int) dmg);
-            HomebrewEngine.setBattleText(defender.p.nickname + " took " + (int) dmg +
-                " damage. (" + defender.p.currHP + "/" + defender.p.stats[0] + "HP)");
+            HomebrewEngine.updateHealthBar(defender.p.currHP, !b);
+            HomebrewEngine.setBattleText(defender.p.nickname + " took " + (int) dmg + " damage.");
             if(defender.p.currHP == 0)
             {
                 defender.p.status = 1;
-                try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
                 HomebrewEngine.setBattleText(defender.p.nickname + " fainted!");
+                try{if(DELAY){Thread.sleep(1500);}}catch(Exception e){}
             }
         }
         else{HomebrewEngine.setBattleText("The move missed!");}
